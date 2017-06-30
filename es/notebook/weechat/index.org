@@ -1,0 +1,2 @@
+* /part: leave a channel
+* /close: close a server, channel or private buffer

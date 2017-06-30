@@ -1,0 +1,13 @@
+* For beagle bone black
+
+  [[https://www.youmagine.com/designs/beaglebone-black-portable-project-case][Portable Project case]]
+
+* For dragonboard
+
+  [[http://www.thingiverse.com/thing:1424340][case]]
+
+* For fun
+
+  [[http://diwo.bq.com/wip-robot-articulado-imprimible/][Wip, un pequeño robot articulado]]
+
+  [[https://www.thingiverse.com/thing:750493][m-o]]

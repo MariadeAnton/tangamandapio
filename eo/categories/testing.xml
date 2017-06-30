@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../../assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Tangamandapio (Artikoloj pri testing)</title><link>http://elopio.net/</link><description></description><atom:link rel="self" type="application/rss+xml" href="http://elopio.net/eo/categories/testing.xml"></atom:link><language>eo</language><lastBuildDate>Fri, 30 Jun 2017 10:45:51 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>User acceptance testing of snaps, with Travis</title><link>http://elopio.net/eo/blog/travis-snap-testing/</link><dc:creator>Leo Arias</dc:creator><description>&lt;div&gt;&lt;p&gt;&lt;a href="https://travis-ci.org/"&gt;Travis CI&lt;/a&gt; offers a great continuous integration
+service for the projects hosted in GitHub. With it you can run tests, deliver
+artifacts and deploy services on pull requests, when they are merged, or with
+some other frecuency.&lt;/p&gt;
+&lt;p&gt;Last week they
+&lt;a href="https://blog.travis-ci.com/2017-06-21-trusty-updates-2017-Q2-launch"&gt;updated the Ubuntu 14.04 (Trusty) machines&lt;/a&gt;
+that run these jobs. This update came with a nice surprise for everybody
+working to deliver software to Linux users, because it is now possible to
+install &lt;a href="https://snapcraft.io"&gt;snaps&lt;/a&gt; in Travis!&lt;/p&gt;
+&lt;p&gt;I've been excited all week telling people about all the doors that this opens;
+but if you have been following my adventures in the Ubuntu world, by now you
+can problably guess that I'm mostly thinking about all the potential this has
+for automated testing. For the automation of user acceptance tests.&lt;/p&gt;
+&lt;p&gt;User acceptance tests are executed from the point of view of the user, with
+your software presented as a black box to them. The tests can only interact
+with the software through the entry points you define for your users. If it's
+a CLI application, then the tests will call commands and subcommands and check
+the outputs. If it's a website or a desktop application, the tests will click
+things, enter text and check the changes on this GUI. If it's a service with
+an HTTP API, the tests will make requests and check the responses. On these
+tests, the closer you can get to simulate the environment and behaviour of your
+real users, the better.&lt;/p&gt;
+&lt;p&gt;Snaps are great for the automation of user acceptance tests because they are
+immutable and they bundle all their dependencies. With this we can make sure
+that your snap will work the same on any of the operating systems and
+architectures that support snaps. The snapd service takes care of hidding
+the differences and presenting a consistent execution environment for the snap.
+So, getting a green execution of these tests in the Trusty machine of Travis is
+a pretty good indication that it will work on all the active releases of
+Ubuntu, Debian, Fedora and even on a Raspberry Pi.&lt;/p&gt;
+&lt;p&gt;Let me show you an example of what I'm talking about, obviously using my
+favourite snap called IPFS. There is
+&lt;a href="http://elopio.net/blog/ipfs-crowdtesting/"&gt;more information about IPFS in my previous post&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This is the packaging metadata for the IPFS snap, a single &lt;code&gt;snapcraft.yaml&lt;/code&gt;
+file:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;ipfs&lt;/span&gt;
+&lt;span class="n"&gt;version&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;master&lt;/span&gt;
+&lt;span class="n"&gt;summary&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;global&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;versioned&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;peer&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;to&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;peer&lt;/span&gt; &lt;span class="n"&gt;filesystem&lt;/span&gt;
+&lt;span class="n"&gt;description&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;
+  &lt;span class="n"&gt;IPFS&lt;/span&gt; &lt;span class="n"&gt;combines&lt;/span&gt; &lt;span class="n"&gt;good&lt;/span&gt; &lt;span class="n"&gt;ideas&lt;/span&gt; &lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="n"&gt;Git&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;BitTorrent&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Kademlia&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;SFS&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;Web&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+  &lt;span class="n"&gt;It&lt;/span&gt; &lt;span class="k"&gt;is&lt;/span&gt; &lt;span class="n"&gt;like&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;single&lt;/span&gt; &lt;span class="n"&gt;bittorrent&lt;/span&gt; &lt;span class="n"&gt;swarm&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;exchanging&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;IPFS&lt;/span&gt; &lt;span class="n"&gt;provides&lt;/span&gt;
+  &lt;span class="n"&gt;an&lt;/span&gt; &lt;span class="kd"&gt;interface&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;simple&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;HTTP&lt;/span&gt; &lt;span class="n"&gt;web&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;but&lt;/span&gt; &lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;permanence&lt;/span&gt; &lt;span class="n"&gt;built&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;You&lt;/span&gt;
+  &lt;span class="n"&gt;can&lt;/span&gt; &lt;span class="n"&gt;also&lt;/span&gt; &lt;span class="n"&gt;mount&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;world&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ipfs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;confinement&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;strict&lt;/span&gt;
+
+&lt;span class="n"&gt;apps&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+  &lt;span class="n"&gt;ipfs&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;command&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;ipfs&lt;/span&gt;
+    &lt;span class="n"&gt;plugs&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;home&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;network&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;network&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;bind&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+
+&lt;span class="n"&gt;parts&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+  &lt;span class="n"&gt;ipfs&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;source&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="o"&gt;://&lt;/span&gt;&lt;span class="n"&gt;github&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;com&lt;/span&gt;&lt;span class="sr"&gt;/ipfs/g&lt;/span&gt;&lt;span class="n"&gt;o&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ipfs&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;git&lt;/span&gt;
+    &lt;span class="n"&gt;plugin&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;nil&lt;/span&gt;
+    &lt;span class="n"&gt;build&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;packages&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;make&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;wget&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+    &lt;span class="n"&gt;prepare&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;
+      &lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;../&lt;/span&gt;&lt;span class="n"&gt;go&lt;/span&gt;&lt;span class="sr"&gt;/src/github.com/ipfs/g&lt;/span&gt;&lt;span class="n"&gt;o&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ipfs&lt;/span&gt;
+      &lt;span class="n"&gt;cp&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;R&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="o"&gt;../&lt;/span&gt;&lt;span class="n"&gt;go&lt;/span&gt;&lt;span class="sr"&gt;/src/github.com/ipfs/g&lt;/span&gt;&lt;span class="n"&gt;o&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ipfs&lt;/span&gt;
+    &lt;span class="n"&gt;build&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;
+      &lt;span class="n"&gt;env&lt;/span&gt; &lt;span class="n"&gt;GOPATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;$&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pwd&lt;/span&gt;&lt;span class="o"&gt;)/../&lt;/span&gt;&lt;span class="n"&gt;go&lt;/span&gt; &lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="o"&gt;../&lt;/span&gt;&lt;span class="n"&gt;go&lt;/span&gt;&lt;span class="sr"&gt;/src/github.com/ipfs/g&lt;/span&gt;&lt;span class="n"&gt;o&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;ipfs&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt;
+    &lt;span class="n"&gt;install&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;|&lt;/span&gt;
+      &lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="n"&gt;$SNAPCRAFT_PART_INSTALL&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;
+      &lt;span class="n"&gt;mv&lt;/span&gt; &lt;span class="o"&gt;../&lt;/span&gt;&lt;span class="n"&gt;go&lt;/span&gt;&lt;span class="sr"&gt;/bin/ipfs $SNAPCRAFT_PART_INSTALL/bin/&lt;/span&gt;
+    &lt;span class="n"&gt;after&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;go&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+  &lt;span class="n"&gt;go&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;source&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;tag&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;go1&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mf"&gt;7.5&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;It's not the most simple snap because they use their own build tool to get the
+go dependencies and compile; but it's also not too complex. If you are new to
+snaps and want to understand every detail of this file, or you want to package
+your own project, the
+&lt;a href="https://tutorials.ubuntu.com/tutorial/create-first-snap"&gt;tutorial to create your first snap&lt;/a&gt;
+is a good place to start.&lt;/p&gt;
+&lt;p&gt;What's important here is that if you run &lt;code&gt;snapcraft&lt;/code&gt; using this yaml file, you
+will get the IPFS snap. If you install that snap, then you can test it from the
+point of view of the user. And if the tests work well, you can push it to the
+edge channel of the Ubuntu store to start the crowdtesting with your community.&lt;/p&gt;
+&lt;p&gt;We can automate all of this with Travis. The &lt;code&gt;snapcraft.yaml&lt;/code&gt; for the project
+must be already in the GitHub repository, and we will add there a &lt;code&gt;.travis.yml&lt;/code&gt;
+file. They have
+&lt;a href="https://docs.travis-ci.com/"&gt;good docs to prepare your Travis account&lt;/a&gt;.
+First, let's see what's required to build the snap:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;sudo&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;required&lt;/span&gt;
+&lt;span class="n"&gt;services&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="n"&gt;docker&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+
+&lt;span class="n"&gt;script&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+  &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;docker&lt;/span&gt; &lt;span class="n"&gt;run&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="n"&gt;$&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pwd&lt;/span&gt;&lt;span class="o"&gt;):&lt;/span&gt;&lt;span class="n"&gt;$&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pwd&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;w&lt;/span&gt; &lt;span class="n"&gt;$&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pwd&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="n"&gt;snapcore&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;snapcraft&lt;/span&gt; &lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt; &lt;span class="s2"&gt;"apt update &amp;amp;&amp;amp; snapcraft"&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;For now, we build the snap in a docker container to keep things simple. We have
+work in progress to be able to install snapcraft in Trusty as a snap, so soon
+this will be even nicer running everything directly in the Travis machine.&lt;/p&gt;
+&lt;p&gt;This previous step will leave the packaged .snap file in the current directory.
+So we can install it adding a few more steps to the Travis script:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[...]&lt;/span&gt;
+
+&lt;span class="na"&gt;script:&lt;/span&gt;
+  &lt;span class="na"&gt;- docker [...]&lt;/span&gt;
+  &lt;span class="na"&gt;- sudo apt install --yes snapd&lt;/span&gt;
+  &lt;span class="na"&gt;- sudo snap install *.snap --dangerous&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;And once it is installed, we can run it and check that it works as expected.
+Those checks are our automated user acceptance test. IPFS has a CLI
+client, so we can just run commands and verify outputs with grep. Or we can get
+fancier using &lt;a href="https://github.com/kward/shunit2"&gt;shunit2&lt;/a&gt; or
+&lt;a href="https://github.com/sstephenson/bats/"&gt;bats&lt;/a&gt;. But the basic idea would be to
+add to the Travis script something like this:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[...]&lt;/span&gt;
+
+&lt;span class="na"&gt;script:&lt;/span&gt;
+  &lt;span class="k"&gt;[...]&lt;/span&gt;
+  &lt;span class="na"&gt;- /snap/bin/ipfs init&lt;/span&gt;
+  &lt;span class="na"&gt;- /snap/bin/ipfs cat /ipfs/QmVLDAhCY3X9P2uRudKAryuQFPM5zqA3Yij1dY8FpGbL7T/readme | grep -z "^Hello and Welcome to IPFS!.*$"&lt;/span&gt;
+  &lt;span class="na"&gt;- [...]&lt;/span&gt;
+&lt;/pre&gt;
+
+
+&lt;p&gt;If one of those checks fail, Travis will mark the execuition as failed and stop
+our release process until we fix them. If all of them pass, then this version
+is good enough to put into the store, where people can take it and run
+exploratory tests to try to find problems caused by weird scenarios that we
+missed in the automation. To help with that we have the
+&lt;code&gt;snapcraft enable-ci travis&lt;/code&gt; command, and an upcoming tutorial to guide you
+step by step
+&lt;a href="https://docs.google.com/document/d/1vPUMH9UNOP8AqjhcslMZ5LQHMV3xvMYYKb7slC4s_Gc/edit?usp=sharing"&gt;setting up the continuous delivery from Travis CI&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For the IPFS snap we had for a long time a manual smoke suite, that our amazing
+&lt;a href="https://forum.snapcraft.io/t/call-for-testing-ipfs/97"&gt;community of testers&lt;/a&gt;
+have been executing over and over again, every time we want to publish a new
+release. I've turned it into
+&lt;a href="https://github.com/elopio/ipfs-snap/blob/master/tests/smoke_test.sh"&gt;a simple bash script&lt;/a&gt;
+that from now on will be executed frequently by Travis, and will tell us if
+there's something wrong before anybody gives it a try manually. With this our
+community of testers will have more time to run new and interesting scenarios,
+trying to break the application in clever ways, instead of running the same
+repetitive steps many times.&lt;/p&gt;
+&lt;p&gt;Thanks to Travis and snapcraft we no longer have to worry about a big part of
+or release process. Continuous integration and delivery can be fully automated,
+and we will have to take a look only when something breaks.&lt;/p&gt;
+&lt;p&gt;As for IPFS, it will keep being my guinea pig to guide new features for
+snapcraft and showcase them when ready. It has many more commands that
+have to be added to the automated test suite, and it also has a web UI and
+an HTTP API. Lots of things to play with! If you would like to help, and
+on the way learn about snaps, automation and the decentralized web, please
+let me know. You can take a look on my
+&lt;a href="https://github.com/elopio/ipfs-snap"&gt;IPFS snap repo&lt;/a&gt; for more details about
+testing snaps in Travis, and other tricks for the build and deployment.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://archive.org/download/elopio-screenshots2/travis/ipsf-travis.png"&gt;&lt;img alt="screenshot of the IPFS smoke test running in travis" src="https://archive.org/download/elopio-screenshots2/travis/ipsf-travis.png"&gt;&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/travis-snap-testing/</guid><pubDate>Thu, 29 Jun 2017 03:51:00 GMT</pubDate></item><item><title>Crowdtesting with the Ubuntu community: the case of IPFS</title><link>http://elopio.net/eo/blog/ipfs-crowdtesting/</link><dc:creator>Leo Arias</dc:creator><description>&lt;div&gt;&lt;p&gt;Here at Ubuntu we are working hard on the future of free software distribution.
+We want developers to release their software to any Linux distro in a way
+that's safe, simple and flexible. You can read more about this at
+&lt;a href="https://snapcraft.io/"&gt;snapcraft.io&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This work is extremely fun because we have to work constantly with a wild
+variety of free software projects to make sure that the tools we write are
+usable and that the workflow we are proposing makes sense to developers and
+gives them a lot of value in return. Today I want to talk about one of those
+projects: IPFS.&lt;/p&gt;
+&lt;p&gt;IPFS is the permanent and decentralized web. How cool is that? You get a
+peer-to-peer distributed file system where you store and retrieve files. They
+have a nice demo &lt;a href="https://ipfs.io/"&gt;in their website&lt;/a&gt;, and you can give it a
+try on Ubuntu Trusty, Xenial or later by running:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;$ sudo snap install ipfs
+&lt;/pre&gt;
+
+
+&lt;p&gt;&lt;a href="https://archive.org/download/elopio-screenshots2/ipfs-peers.png"&gt;&lt;img alt="screenshot of the IPFS peers" src="https://archive.org/download/elopio-screenshots2/ipfs-peers.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;So, here's one of the problems we are trying to solve. We have millions of users
+on the Trusty version of Ubuntu, released during 2014. We also have millions of
+users on the Xenial version, released during 2016. Those two versions are stable
+now, and following the Ubuntu policies, they will get only security updates for
+5 years. That means that it's very hard, almost impossible, for a young project
+like IPFS to get into the Ubuntu archives for those releases. There will be no
+simple way for all those users to enjoy IPFS, they would have to use a
+&lt;a href="https://en.wikipedia.org/wiki/Personal_Package_Archive"&gt;Personal Package Archive&lt;/a&gt;
+or install the software from a
+&lt;a href="https://en.wikipedia.org/wiki/Tar_(computing)"&gt;tarball&lt;/a&gt;. Both methods are
+complex with high security risks, and both require the users to put a lot of
+trust on the developers, more than what they should ever trust anybody.&lt;/p&gt;
+&lt;p&gt;We are closing the Zesty release cycle which will go out in April, so it's
+too late there too. IPFS could make a
+&lt;a href="https://en.wikipedia.org/wiki/Deb_(file_format)"&gt;deb&lt;/a&gt;, put it into Debian,
+wait for it to sync to Ubuntu, and then it's likely that it will be ready for
+the October release. Aside from the fact that we have to wait until October,
+there are a few other problems. First, making a deb is not simple. It's not
+too hard either, but it requires quite some time to learn to do it right.
+Second, I mentioned that IPFS is young, they are on the 0.4.6 version. So, it's
+very unlikely that they will want to support this early version for such a long
+time as Debian and Ubuntu require. And they are not only young, they are also
+fast. They add new features and bug fixes every day and make new releases almost
+every week, so they need a feedback loop that's just as fast. A 6 months release
+cycle is way too slow. That works nicely for some kinds of free software
+projects, but not for one like IPFS.&lt;/p&gt;
+&lt;p&gt;They have been kind enough to let me play with their project and use it as a
+test subject to verify our end-to-end workflow. My passion is testing, so I have
+been focusing on continuous delivery to get happy early adopters and constant
+feedback about the most recent changes in the project.&lt;/p&gt;
+&lt;p&gt;I started by making a
+&lt;a href="https://github.com/elopio/ipfs-snap/blob/master/snapcraft.yaml"&gt;snapcraft.yaml&lt;/a&gt;
+file that contains all the metadata required for the snap package. The file is
+pretty simple and to make the first version it took me just a couple of minutes,
+true story. Since then I've been slowly improving and updating it with small
+changes. If you are interested in doing the same for your project, you can read
+&lt;a href="https://tutorials.ubuntu.com/tutorial/create-first-snap"&gt;the tutorial to create a snap&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I built and tested this snap locally on my machines. It worked nicely, so I
+pushed it to the edge channel of the Ubuntu Store. Here, the snap is not visible
+on user searches, only the people who know about the snap will be able to
+install it. I told a couple of my friends to give it a try, and they came back
+telling me how cool IPFS was. Great choice for my first test subject, no
+doubt.&lt;/p&gt;
+&lt;p&gt;At this point, following the pace of the project by manually building and
+pushing new versions to the store was too demanding, they go too fast. So, I
+started working on continuous delivery by translating everything I did manually
+into scripts and hooking them to travis-ci. After a few days, it got pretty
+fancy, take a look at
+&lt;a href="https://github.com/elopio/ipfs-snap"&gt;the github repo of the IPFS snap&lt;/a&gt; if you
+are curious. Every day, a new version is packaged from the latest state of the
+master branch of IPFS and it is pushed to the edge channel, so we have a constant
+flow of new releases for hardcore early adopters. After they install IPFS from
+the edge channel once, the package will be automatically updated in their
+machines every day, so they don't have to do anything else, just use IPFS as
+they normally would.&lt;/p&gt;
+&lt;p&gt;Now with this constant stream of updates, me and my two friends were not enough
+to validate all the new features. We could never be sure if the project was
+stable enough to be pushed to the stable channel and make it available to the
+millions and millions of Ubuntu users out there.&lt;/p&gt;
+&lt;p&gt;Luckily, the Ubuntu community is huge, and they are very nice people. It was
+time to use the wisdom of the crowds. I invited the most brave of them to keep
+the snap installed from edge and I defined a simple pipeline that leads to the
+stable release using the four available channels in the Ubuntu store:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;When a revision is tagged in the IPFS master repo, it is automatically pushed
+   to edge channel from travis, just as with any other revision.&lt;/li&gt;
+&lt;li&gt;Travis notifies me about this revision.&lt;/li&gt;
+&lt;li&gt;I install this tagged revision from edge, and run a super quick test to make
+   sure that the IPFS server starts.&lt;/li&gt;
+&lt;li&gt;If it starts, I push the snap to the beta channel.&lt;/li&gt;
+&lt;li&gt;With a couple of my friends, we run a
+   &lt;a href="https://gist.github.com/elopio/7492a28bd1aef6c4a86b5dcf5d5cb65b#file-ipfs-smoke-tests-md"&gt;suite of smoke tests&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;If everything goes well, I push the snap to the candidate channel.&lt;/li&gt;
+&lt;li&gt;I notify the community of Ubuntu testers about a new version in the candidate
+   channel. This is were the magic of crowd testing happens.&lt;/li&gt;
+&lt;li&gt;The Ubuntu testers run the smoke tests in all their machines, which gives us
+   the confidence we need because we are confirming that the new version works
+   on different platforms, distros, distro releases, countries, network
+   topologies, you name it.&lt;/li&gt;
+&lt;li&gt;This candidate release is left for some time in this channel, to let the
+   community run thorough exploratory tests, trying to find weird usage
+   combinations that could break the software.&lt;/li&gt;
+&lt;li&gt;If the tag was for a final upstream release, the community also runs
+   &lt;a href="https://gist.github.com/elopio/7492a28bd1aef6c4a86b5dcf5d5cb65b#file-ipfs-update-tests-md"&gt;update tests&lt;/a&gt;
+   to make sure that the users with the stable snap installed will get this new
+   version without issues.&lt;/li&gt;
+&lt;li&gt;After all the problems found by the community have been resolved or at least
+   acknowledged and triaged as not blockers, I move the snap from candidate
+   to the stable channel.&lt;/li&gt;
+&lt;li&gt;All the users following the stable channel will automatically get a very well
+   tested version, thanks to the community who contributed with the testing and
+   accepted a higher level of risk.&lt;/li&gt;
+&lt;li&gt;And we start again, the never-ending cycle of making free software :)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now, let's go back to the discussion about trust. Debian and Ubuntu, and most of
+the other distros, rely on maintainers and distro developers to package and
+review every change on the software that they put in their archives. That is
+a lot of work, and it slows down the feedback loop a lot, as we have seen. In
+here we automated most of the tasks of a distro maintainer, and the new
+revisions can be delivered directly to the users without any reviews. So the
+users are trusting directly their upstream developers without intermediaries,
+but it's very different from the previously existing and unsafe methods. The
+code of snaps is installed read-only, very well constrained with access only to
+their own safe space. Any other access needs to be declared by the snap, and
+the user is always in control of which access is permitted to the application.&lt;/p&gt;
+&lt;p&gt;This way upstream developers can go faster but without exposing their users to
+unnecessary risks. And they just need a simple snapcraft.yaml file and to define
+their own continuous delivery pipeline, on their own timeline.&lt;/p&gt;
+&lt;p&gt;By removing the distro as the intermediary between the developers and their
+users, we are also making a new world full of possibilities for the Ubuntu
+community. Now they can collaborate constantly and directly with upstream
+developers, closing this quick feedback loop. In the future we will tell our
+children of the good old days when we had to report a bug in Ubuntu, which
+would be copied to Debian, then sent upstream to the developers, and after 6
+months, the fix would arrive. It was fun, and it lead us to where we are today,
+but I will not miss it at all.&lt;/p&gt;
+&lt;p&gt;Finally, what's next for IPFS? After this experiment we got more than 200
+unique testers and almost 300 test installs. I now have great confidence on
+this workflow, new revisions were delivered on time, existing Ubuntu
+testers became new IPFS contributors and I now can safely recommend IPFS
+users to install the stable snap. But there's still plenty of work ahead.
+There are still manual steps in the pipeline that can be scripted, the smoke
+tests can be automated to leave more free time for exploratory testing, we can
+release also to armhf and arm64 architectures to get IPFS into the
+&lt;a href="https://www.ubuntu.com/internet-of-things"&gt;IoT world&lt;/a&gt;, and well, of course the
+developers are not stopping, they keep releasing new interesting features. As I
+said, plenty of opportunities for us as distro contributors.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://archive.org/download/elopio-screenshots2/ipfs-stats.png"&gt;&lt;img alt="screenshot of the IPFS snap stats" src="https://archive.org/download/elopio-screenshots2/ipfs-stats.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I'd like to thank everybody who tested the IPFS snap, specially the following
+people for their help and feedback:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;freekvh&lt;/li&gt;
+&lt;li&gt;urcminister&lt;/li&gt;
+&lt;li&gt;Carla Sella&lt;/li&gt;
+&lt;li&gt;casept&lt;/li&gt;
+&lt;li&gt;Colin Law&lt;/li&gt;
+&lt;li&gt;ventrical&lt;/li&gt;
+&lt;li&gt;cariboo&lt;/li&gt;
+&lt;li&gt;howefield&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;lt;3&lt;/p&gt;
+&lt;p&gt;If you want to release your project to the Ubuntu store, take a look at the
+&lt;a href="https://snapcraft.io/"&gt;snapcraft docs&lt;/a&gt;, the
+&lt;a href="https://tutorials.ubuntu.com/"&gt;Ubuntu tutorials&lt;/a&gt;, and come talk to us in
+&lt;a href="https://rocket.ubuntu.com/channel/snapcraft"&gt;Rocket Chat&lt;/a&gt;.&lt;/p&gt;&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/ipfs-crowdtesting/</guid><pubDate>Mon, 06 Mar 2017 16:36:00 GMT</pubDate></item><item><title>Call for testing: MySQL</title><link>http://elopio.net/eo/blog/call-for-testing-mysql/</link><dc:creator>Leo Arias</dc:creator><description>&lt;div&gt;&lt;p&gt;I promised that more interesting things were going to be available soon for
+testing in Ubuntu. There's plenty coming, but today here is one of the
+greatest:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;$ sudo snap install mysql --channel&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;8&lt;/span&gt;.0/beta
+&lt;/pre&gt;
+
+
+&lt;p&gt;&lt;a href="https://archive.org/download/elopio-screenshots2/Screenshot_ubuntu-xenial-20170228_2017-02-28_093217.png"&gt;&lt;img alt="screenshot of mysql snap running" src="https://archive.org/download/elopio-screenshots2/Screenshot_ubuntu-xenial-20170228_2017-02-28_093217.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Lars Tangvald and other people at MySQL have been working on this snap for some
+time, and now they are ready to give it to the community for crowd testing. If
+you have some minutes, please give them a hand.&lt;/p&gt;
+&lt;p&gt;We have a
+&lt;a href="https://gist.github.com/elopio/c868bc68bf8640b0b49b39aeb1fae8f5"&gt;testing guide&lt;/a&gt;
+to help you getting started.&lt;/p&gt;
+&lt;p&gt;Remember that this should run in trusty, xenial, yakkety, zesty and in all
+flavours of Ubuntu. It would be great to get a diverse pool of platforms and
+test it everywhere.&lt;/p&gt;
+&lt;p&gt;In here we are introducing a new concept:
+&lt;a href="https://snapcraft.io/docs/reference/channels"&gt;tracks&lt;/a&gt;. Notice that we are
+using &lt;code&gt;--channel=8.0/beta&lt;/code&gt;, instead of only &lt;code&gt;--beta&lt;/code&gt; as we used to do before.
+That's because mysql has two different major versions currently active. In order
+to try the other one:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;$ sudo snap install mysql --channel&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;5&lt;/span&gt;.7/beta
+&lt;/pre&gt;
+
+
+&lt;p&gt;Please report back your results. Any kind of feedback will be highly appreciated,
+and if you have doubts or need a hand to get started, I'm hanging around in
+&lt;a href="https://rocket.ubuntu.com/channel/community"&gt;Rocket Chat&lt;/a&gt;.&lt;/p&gt;&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/call-for-testing-mysql/</guid><pubDate>Tue, 28 Feb 2017 17:40:00 GMT</pubDate></item><item><title>Call for testing: snaps in Trusty</title><link>http://elopio.net/eo/blog/call-for-testing-trusty-snaps/</link><dc:creator>Leo Arias</dc:creator><description>&lt;div&gt;&lt;p&gt;There is a huge announcement coming: snaps now run in Ubuntu 14.04 Trusty Tahr.&lt;/p&gt;
+&lt;p&gt;Take a moment to note how big this is. Ubuntu 14.04 is a long-term release that
+will be supported until 2019. Ubuntu 16.04 is also a long-term release that
+will be supported until 2021. We have many many many users in both releases,
+some of which will stay there until we drop the support. Before this snappy new
+world, all those users were stuck with the versions of all their programs
+released in 2014 or 2016, getting only updates for security and critical
+issues. Just try to remember how your favorite program looked 5 years ago;
+maybe it didn't even exist. We were used to choose between stability and cool
+new features.&lt;/p&gt;
+&lt;p&gt;Well, a new world is possible. With snaps you can have a stable base system
+with frequent updates for every program, without the risk of breaking your
+machine. And now if you are a Trusty user, you can just start taking advantage
+of all this. If you are a developer, you have to prepare only one release and
+it will just work in all the supported Ubuntu releases.&lt;/p&gt;
+&lt;p&gt;Awesome, right? The Ubuntu devs have been doing a great job. snapd has already
+landed in the Trusty archive, and we have been running many manual and
+automated tests on it. So we would like now to invite the community to test it,
+explore weird paths, try to break it. We will appreciate it very much, but all
+of those Trusty users out there will love it, when they receive loads of new
+high quality free software on their oldie machines.&lt;/p&gt;
+&lt;p&gt;So, how to get started?&lt;/p&gt;
+&lt;p&gt;If you are already running Trusty, you will just have to install snapd:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;$ sudo apt update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt install snapd
+&lt;/pre&gt;
+
+
+&lt;p&gt;Reboot your system after that in case you had a kernel update pending, and to
+get the paths for the new snap binaries set up.&lt;/p&gt;
+&lt;p&gt;If you are running a different Ubuntu release, you can
+&lt;a href="http://elopio.net/blog/install-ubuntu-in-vm/"&gt;Install Ubuntu in a virtual machine&lt;/a&gt;.
+Just make sure that you install the
+&lt;a href="http://elopio.net/eo/blog/call-for-testing-trusty-snaps/14.04%20iso"&gt;http://releases.ubuntu.com/14.04/ubuntu-14.04.5-desktop-amd64.iso&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Once you have Trusty with snapd ready, try a few commands:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;$ snap list
+$ sudo snap install hello-world
+$ hello-world
+$ snap find something
+&lt;/pre&gt;
+
+
+&lt;p&gt;&lt;a href="https://archive.org/download/elopio-screenshots2/trusty/trusty-snaps-bigger.png"&gt;&lt;img alt="screenshot of snaps running in Trusty" src="https://archive.org/download/elopio-screenshots2/trusty/trusty-snaps-bigger.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Keep searching for snaps until you find one that's interesting. Install it,
+try it, and let us know how it goes.&lt;/p&gt;
+&lt;p&gt;If you find something wrong, please
+&lt;a href="https://bugs.launchpad.net/snapd/+filebug"&gt;report a bug&lt;/a&gt; with the &lt;code&gt;trusty&lt;/code&gt;
+tag. If you are new to the Ubuntu community or get lost on the way, come and
+join us in &lt;a href="https://rocket.ubuntu.com/channel/community"&gt;Rocket Chat&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;And after a good session of testing, sit down, relax, and get ohmygiraffe. With
+love from &lt;a href="https://twitter.com/popey"&gt;popey&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;$ sudo snap install ohmygiraffe
+$ ohmygiraffe
+&lt;/pre&gt;
+
+
+&lt;p&gt;&lt;a href="https://archive.org/download/elopio-screenshots2/trusty/ohmygiraffe.png"&gt;&lt;img alt="screenshot of ohmygiraffe" src="https://archive.org/download/elopio-screenshots2/trusty/ohmygiraffe.png"&gt;&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/call-for-testing-trusty-snaps/</guid><pubDate>Fri, 10 Feb 2017 14:00:00 GMT</pubDate></item><item><title>Ubuntu Testing Day wrap up - Ubuntu Core and QEMU (20170203)</title><link>http://elopio.net/eo/blog/ubuntu-testing-day-wrap-up-20170203/</link><dc:creator>Leo Arias</dc:creator><description>&lt;div&gt;&lt;p&gt;After a little break, on the first Friday of February we resumed the Ubuntu
+Testing Days.&lt;/p&gt;
+&lt;p&gt;This session was pretty interesting, because after setting some of the bases
+last year we are now ready to dig deep into the most important projects that
+will define the future of Ubuntu.&lt;/p&gt;
+&lt;p&gt;We talked about Ubuntu Core, a snap package that is the base of the operating
+system. Because it is a snap, it gets the same benefits as all the other snaps:
+automatic updates, rollbacks in case of error during installation, read-only
+mount of the code, isolation from other snaps, multiple channels on the store
+for different levels of stability, etc.&lt;/p&gt;
+&lt;p&gt;The features, philosophy and future of Core were presented by
+&lt;a href="https://mvogt.wordpress.com/"&gt;Michael Vogt&lt;/a&gt; and
+&lt;a href="https://twitter.com/zygoon"&gt;Zygmunt Krynicki&lt;/a&gt;, and then
+&lt;a href="https://twitter.com/frgnieto"&gt;Federico Giménez&lt;/a&gt; did a great demo of how to
+create an image and test it in QEMU.&lt;/p&gt;
+&lt;p&gt;Click the image below to watch the full session.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=nBfAmCZMXQ8"&gt;&lt;img alt="Alt text" src="https://img.youtube.com/vi/nBfAmCZMXQ8/0.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;There are plenty of resources in the Ubuntu websites related to Ubuntu Core.&lt;/p&gt;
+&lt;p&gt;To get started, we recommend to follow this guide to
+&lt;a href="https://developer.ubuntu.com/core/get-started/kvm"&gt;run the operating system in a virtual machine&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;After that, and if you are feeling brave and want to help Michael, Zygmund and
+Federico, you can download the candidate image instead, from
+&lt;a href="http://cdimage.ubuntu.com/ubuntu-core/16/candidate/pending/ubuntu-core-16-amd64.img.xz"&gt;http://cdimage.ubuntu.com/ubuntu-core/16/candidate/pending/ubuntu-core-16-amd64.img.xz&lt;/a&gt;
+This is the image that's being currently tested, so if you find something wrong
+or weird, please
+&lt;a href="https://bugs.launchpad.net/snapd/+filebug"&gt;report a bug in Launchpad&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Finally, if you want to learn more about the snaps that compose the image and
+take a peek at the things that we'll cover in the following testing days, you
+can follow the
+&lt;a href="https://tutorials.ubuntu.com/tutorial/create-your-own-core-image#0"&gt;tutorial to create your own Core image&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;On this session we were also accompanied by
+&lt;a href="https://twitter.com/sdrobertw"&gt;Robert Wolff&lt;/a&gt; who works on 96boards at Linaro.
+He has an awesome show every Thursday called
+&lt;a href="https://www.96boards.org/openhours/"&gt;Open Hours&lt;/a&gt;. At 96boards they are
+building open Linux boards for prototyping and embedded computing. Anybody can
+jump into the Open Hours to learn more about this cool work.&lt;/p&gt;
+&lt;p&gt;The great news that Robert brought is that both Open Hours and Ubuntu Testing
+Days will be focused on Ubuntu Core this month. He will be our guest again next
+Friday, February 10th, where he will be talking about the
+&lt;a href="http://www.96boards.org/product/dragonboard410c/"&gt;DragonBoard 410c&lt;/a&gt;. Also my
+good friend &lt;a href="https://plus.google.com/+OliverGrawert"&gt;Oliver Grawert&lt;/a&gt; will be
+with us, and he will talk about the work he has been doing to enable Ubuntu in
+this board.&lt;/p&gt;
+&lt;p&gt;Great topics ahead, and a full new world of possiblities now that we are
+mixing free software with open hardware and affordable prototyping tools.
+Remember, every Friday in &lt;a href="http://ubuntuonair.com/"&gt;http://ubuntuonair.com/&lt;/a&gt;,
+no se lo pierda.&lt;/p&gt;&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/ubuntu-testing-day-wrap-up-20170203/</guid><pubDate>Thu, 09 Feb 2017 05:38:13 GMT</pubDate></item><item><title>Call for testing: IPFS</title><link>http://elopio.net/eo/blog/call-for-testing-ipfs/</link><dc:creator>Leo Arias</dc:creator><description>&lt;div&gt;&lt;p&gt;Happy new year Ubunteros and Ubunteras!&lt;/p&gt;
+&lt;p&gt;If you have been following our testing days, you will know by now that
+our intention is to get more people contributing to Ubuntu and free
+software projects, and to help them getting started through testing
+and related tasks. So, we will be making frequent calls for testing
+where you can contribute and learn. Educational AND fun ^_^&lt;/p&gt;
+&lt;p&gt;To start the year, I would like to invite you to test the IPFS
+candidate snap. IPFS is a really interesting free project for
+distributed storage. You can read more about it and watch a demo in
+the &lt;a href="https://ipfs.io/%5D"&gt;IPFS website&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;We have pushed a nice snap with their latest stable version to the
+candidate channel in the store. But before we publish it to the stable
+channel we would like to get more people testing it.&lt;/p&gt;
+&lt;p&gt;You can get a clean and safe environment to test following some of the
+guides you'll find on the
+&lt;a href="https://wiki.ubuntu.com/Testing/UbuntuTestingDay"&gt;summaries of the past testing days&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Or, if you want to use your current system, you can just do:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;$ sudo snap install ipfs --candidate
+&lt;/pre&gt;
+
+
+&lt;p&gt;I have written a
+&lt;a href="https://gist.github.com/elopio/7492a28bd1aef6c4a86b5dcf5d5cb65b#smoke-tests-for-the-ipfs-snap"&gt;gist with a simple guide to get started testing it&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;If you finish that successfully and still have more time, or are
+curious about ipfs, please continue with an exploratory testing
+session. The idea here is just to execute random commands, try unusual
+inputs and just play around.&lt;/p&gt;
+&lt;p&gt;You can get ideas from the &lt;a href="https://ipfs.io/docs/examples/"&gt;IPFS docs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;When you are done, please send me an email with your results and any
+comments. And if you get stuck or have any kind of question, please
+don't hesitate to ask. Remember that we welcome everybody.&lt;/p&gt;&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/call-for-testing-ipfs/</guid><pubDate>Fri, 06 Jan 2017 15:58:13 GMT</pubDate></item><item><title>Ubuntu Testing Day wrap up - snapcraft and beers (20161216)</title><link>http://elopio.net/eo/blog/ubuntu-testing-day-wrap-up-20161216/</link><dc:creator>Leo Arias</dc:creator><description>&lt;div&gt;&lt;p&gt;Today we had the last Ubuntu Testing Day of the year.&lt;/p&gt;
+&lt;p&gt;We invited &lt;a href="http://blog.sergiusens.org/"&gt;Sergio Schvezov&lt;/a&gt; and
+&lt;a href="https://twitter.com/JoeTalbott"&gt;Joe Talbott&lt;/a&gt;, to join
+&lt;a href="https://twitter.com/rainveil"&gt;Kyle&lt;/a&gt; and myself. Together we have been working
+on &lt;a href="http://snapcraft.io"&gt;Snapcraft&lt;/a&gt; the whole year.&lt;/p&gt;
+&lt;p&gt;Sergio did a great introduction of snapcraft, and showed some of the new
+features that will land next week in Ubuntu. And because it was the last day of
+work for everybody (except Kyle), we threw some beers into the hang out and
+made it our team end of year party.&lt;/p&gt;
+&lt;p&gt;You can watch the full recording by clicking the image below.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=S30MI-suotQ"&gt;&lt;img alt="Alt text" src="https://img.youtube.com/vi/S30MI-suotQ/0.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Snapcraft is one of the few projects that have an exception to land new features
+into released versions of Ubuntu. So every week we are landing new things in
+Xenial and Yakkety. This means that we need to constantly test that we are not
+breaking anything for all the people using stable Ubuntu releases; and it means
+that we would love to have many more hands helping us with those tests.&lt;/p&gt;
+&lt;p&gt;If you would like to help, all you have to do is
+&lt;a href="http://elopio.net/blog/install-ubuntu-in-vm/"&gt;set up a virtual machine&lt;/a&gt; and
+&lt;a href="http://elopio.net/blog/test-sru/"&gt;enable the proposed pocket&lt;/a&gt; in there.&lt;/p&gt;
+&lt;p&gt;This is the active bug for the Stable Release Update of snapcraft 2.24:
+&lt;a href="https://bugs.launchpad.net/ubuntu/+source/snapcraft/+bug/1650632"&gt;bug #1650632&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Before I shut down my computer and start my holidays, I would like to thank all
+the Ubuntu community for one more year, it has been quite a ride. And I would
+like to thank Sergio, Kyle and Joe in particular. They are the best team a QA
+Engineer could ask for &amp;lt;3.&lt;/p&gt;
+&lt;p&gt;See you next year for more testing days.&lt;/p&gt;&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/ubuntu-testing-day-wrap-up-20161216/</guid><pubDate>Sat, 17 Dec 2016 02:34:13 GMT</pubDate></item><item><title>Test a stable release update</title><link>http://elopio.net/eo/blog/test-sru/</link><dc:creator>Leo Arias</dc:creator><description>&lt;p&gt;Ubuntu has a six month cycle for releases. This means that we work for six months updating software, adding new features and making sure that it all works consistently together when it’s integrated into the operating system, and then we release it. Once we make a release, it is considered stable and then we almost exclusively add to that release critical bug fixes and patches for security vulnerabilities. The exceptions are just a few, and are for software that’s important for Ubuntu and that we want to keep up-to-date with the latest features even in stable releases.&lt;/p&gt;
+&lt;p&gt;These bug fixes, security patches and exceptional new features require a lot of testing, because right after they are published they will reach all the Ubuntu users that are in the stable release. And we want the release to remain stable, never ever introduce a regression that will make those users unhappy.&lt;/p&gt;
+&lt;p&gt;We call all of them &lt;a href="https://wiki.ubuntu.com/StableReleaseUpdates"&gt;Stable Release Updates&lt;/a&gt;, and we test them in the &lt;em&gt;proposed&lt;/em&gt; pocket of the Ubuntu archive. This is obviously not enabled by default, so the brave souls that want to help us testing the changes in proposed need to enable it.&lt;/p&gt;
+&lt;p&gt;Before we go on, I would recommend to test SRUs &lt;a href="http://elopio.net/blog/install-ubuntu-in-vm/"&gt;in a virtual machine&lt;/a&gt;. Once you enable proposed following this guide you will get constant and untested updates from many packages, and these updates will break parts of your system every now and then. It’s not likely to be critical, but it can bother you if it happens on the machine you need to do your work, or other stuff. And if somebody makes a mistake, you might need to reinstall the system.&lt;/p&gt;
+&lt;p&gt;You will also have to find a package that needs testing. &lt;a href="http://snapcraft.io"&gt;Snapcraft&lt;/a&gt; is one of the few exceptions allowed to land in a stable release every week. So lets use it as an example. Lets say you want to help us testing the upcoming release of snapcraft in Ubuntu 16.04.&lt;/p&gt;
+&lt;p&gt;With your machine ready and before enabling proposed, install the version already released of the package you want to test. This way you’ll test later an update to the newer version, just what a normal user would get once the update is approved and lands in the archive. So in a terminal, write:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ sudo apt update
+  $ sudo apt install snapcraft&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Or replace &lt;em&gt;snapcraft&lt;/em&gt; with whatever package you are testing. If you are doing it just during the weekend after I am writing this, the released version of snapcraft will be 2.23. You can check it with:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ dpkg -s snapcraft | grep Version
+  Version: 2.23&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, to enable proposed, open the &lt;em&gt;Ubuntu Software&lt;/em&gt; application, and select &lt;em&gt;Software &amp;amp; Updates&lt;/em&gt; from the menu in the top of the window.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://archive.org/download/elopio-screenshots2/sru/1-open_sources.png"&gt; &lt;img src="https://archive.org/download/elopio-screenshots2/sru/1-open_sources.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;From the &lt;em&gt;Software &amp;amp; Updates&lt;/em&gt; window, select the &lt;em&gt;Developer Options&lt;/em&gt; tab. And check the item that says &lt;em&gt;Pre-released updates&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://archive.org/download/elopio-screenshots2/sru/2-enable_proposed.png"&gt; &lt;img src="https://archive.org/download/elopio-screenshots2/sru/2-enable_proposed.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This will prompt for your password. Enter it, and then click the &lt;em&gt;Close&lt;/em&gt; button. You will be asked if you want to reload your sources, so yes, click the &lt;em&gt;Reload&lt;/em&gt; button.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://archive.org/download/elopio-screenshots2/sru/3-reload.png"&gt; &lt;img src="https://archive.org/download/elopio-screenshots2/sru/3-reload.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Finally try to upgrade. If there is a newer version available in the proposed pocket for the packet you are testing, now you will get it.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ sudo apt install snapcraft
+  $ dpkg -s snapcraft | grep Version
+  Version: 2.24&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Every time there is a proposed update, the package will have corresponding SRU bugs with the tag “verification-needed”. In the case of snapcraft this weekend, this is the bug for the 2.24 proposed update: &lt;a href="https://bugs.launchpad.net/ubuntu/+source/snapcraft/+bug/1650632"&gt;https://bugs.launchpad.net/ubuntu/+source/snapcraft/+bug/1650632&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The SRU bugs will have instructions about how to test that the fix or the new features released are correct. Follow those steps, and if you are confident that they work as expected, change the tag to “verification-done”. If you find that the fix is not correct, change the tag to “verification-failed”. In case of doubt, you can leave a comment in the bug explaining what you tried and what you found.&lt;/p&gt;
+&lt;p&gt;You can read more about SRUs in the &lt;a href="https://wiki.ubuntu.com/StableReleaseUpdates"&gt;Stable Release Updates wiki page&lt;/a&gt;, and also in the &lt;a href="https://wiki.ubuntu.com/QATeam/PerformingSRUVerification"&gt;wiki page explaining how to perform verifications&lt;/a&gt;. This last page includes a section to find packages and bugs that need verification. If you want to help the Ubuntu community, you can just jump in and start verifying some of the pending bugs. It will be highly appreciated.&lt;/p&gt;
+&lt;p&gt;If you have questions or find a problem, join us in the &lt;a href="https://rocket.ubuntu.com/channel/community"&gt;Ubuntu Rocket Chat&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="references"&gt;
+
+&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/test-sru/</guid><pubDate>Fri, 16 Dec 2016 19:01:35 GMT</pubDate></item><item><title>Ubuntu Testing Day wrap up - Unity8 (20161209)</title><link>http://elopio.net/eo/blog/ubuntu-testing-day-wrap-up-20161209/</link><dc:creator>Leo Arias</dc:creator><description>&lt;div&gt;&lt;p&gt;For the third session of the Ubuntu Testing Days,
+&lt;a href="https://plus.google.com/+KevinGunnCanonical"&gt;Kevin Gunn&lt;/a&gt; joined us to talk
+about the Unity8 snap.&lt;/p&gt;
+&lt;p&gt;This is a thriving project with lots of things to do and bugs to uncover, so
+it's the perfect candidate for newcomers eager to help Ubuntu.&lt;/p&gt;
+&lt;p&gt;If you are interested and didn't attend our meeting on Friday, click the image
+below to watch the recording.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=oGsA55RvqLI"&gt;&lt;img alt="Alt text" src="https://img.youtube.com/vi/oGsA55RvqLI/0.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;To install Unity 8 in the Ubuntu 16.04
+&lt;a href="http://elopio.net/blog/pristine-vm/"&gt;cloned virtual machine&lt;/a&gt;
+that we prepared on the past session, enter the following commands in the terminal:&lt;/p&gt;
+&lt;pre class="code literal-block"&gt;&lt;span&gt;&lt;/span&gt;$ sudo add-apt-repository -u ppa:ci-train-ppa-service/stable-phone-overlay
+$ sudo apt install unity8-session-snap
+$ unity8-snap-install
+$ sudo reboot
+&lt;/pre&gt;
+
+
+&lt;p&gt;After reboot, on the login screen click the Ubuntu icon next to your user name
+and change the selection to Unity 8.&lt;/p&gt;
+&lt;p&gt;Kevin and his team have a
+&lt;a href="https://docs.google.com/document/d/1o-jKITqUxRsujmN3OwRj3wRnn6dgblKuvrhKjeN8-Wc/edit#heading=h.q06bivmaid8f"&gt;google doc with the instructions to build and install the snap, and the
+current status&lt;/a&gt;.
+If you find a bug, you can talk to the developers joining the
+&lt;a href="http://webchat.freenode.net/?channels=#ubuntu-touch"&gt;#ubuntu-touch IRC channel on freenode&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;While preparing the testing environment on this session we had a crash, and
+explained how easy it is to send the report to the Ubuntu developers by just
+clicking the &lt;em&gt;Report problem...&lt;/em&gt; button. The reports from all our users
+are in the &lt;a href="https://errors.ubuntu.com/"&gt;error tracker&lt;/a&gt;, along with a frequency
+graph and the links to bug reports where those crashes are being fixed.&lt;/p&gt;
+&lt;p&gt;We also showed two tricks to make faster and more pleasant the testing session
+in a virtual machine:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://elopio.net/blog/setup-apt-cache/"&gt;Set up a cache for deb packages&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://askubuntu.com/questions/858649/how-can-i-copypaste-from-the-host-to-a-kvm-guest"&gt;Share the clipboard between the host and the guest&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Thanks to &lt;a href="https://twitter.com/la_juyis"&gt;Julia&lt;/a&gt;,
+&lt;a href="https://twitter.com/rainveil"&gt;Kyle&lt;/a&gt; and
+&lt;a href="https://plus.google.com/+KevinGunnCanonical"&gt;Kevin&lt;/a&gt; for the nice session.&lt;/p&gt;
+&lt;p&gt;Join us again next Friday at &lt;a href="https://ubuntuonair.com"&gt;Ubuntu On-Air&lt;/a&gt;.&lt;/p&gt;&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/ubuntu-testing-day-wrap-up-20161209/</guid><pubDate>Tue, 13 Dec 2016 15:41:13 GMT</pubDate></item><item><title>Set up a cache for deb packages</title><link>http://elopio.net/eo/blog/setup-apt-cache/</link><dc:creator>Leo Arias</dc:creator><description>&lt;p&gt;All Linux distributions are constantly updating the versions of the packages in their archives. That’s what makes them great, lots of people working in a distributed way to let you easily update your software and get the latest features or critical bug fixes.&lt;/p&gt;
+&lt;p&gt;And you should constatly update your operating system. Otherwise you’ll become an easy target for criminals exploiting known vulnerabilities.&lt;/p&gt;
+&lt;p&gt;The problem, at least for me, is that I have many many Ubuntu machines in the house and my badwidth is really bad. So keeping all my real machines, virtual machines and various devices up-to-date every day has become a slow problem.&lt;/p&gt;
+&lt;p&gt;The solution is to cache the downloaded deb packages. So only one machine has to make the downloads from the internet, and they will be kept in my local network to make much faster to get the packages in the other machines.&lt;/p&gt;
+&lt;p&gt;So let me introduce you to &lt;a href="https://www.unix-ag.uni-kl.de/~bloch/acng/"&gt;Apt-Cacher NG&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Setting it up is simple. First, choose a machine to run the cacher and store the packages. Ideally, this machine should be running all the time, and should have a good amount of storage space. I’m using my desktop as the cacher; but as soon as I update my router to one that runs Ubuntu, I will make that one the cacher.&lt;/p&gt;
+&lt;p&gt;On that machine, install apt-cacher-ng:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  sudo apt install apt-cacher-ng&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And that’s it. The cacher is installed and configured. Now we need the name of this machine to use it on the other ones:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ hostname
+  calchas&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In this example, &lt;em&gt;calchas&lt;/em&gt; is the name of the machine I’m using as the cacher. Take note of the name of your machine, and now, in all the other machines:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ sudo gedit /etc/apt/apt.conf.d/02proxy&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That will create a new empty configuration file for &lt;em&gt;apt&lt;/em&gt;, and open it to be edited with &lt;em&gt;gedit&lt;/em&gt;, the default graphical editor in Ubuntu. In the editor, write this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  Acquire::http::proxy "http://calchas.lan:3142";&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;replacing &lt;em&gt;calchas&lt;/em&gt; with the name of your cacher machine, collected above. The &lt;em&gt;.lan&lt;/em&gt; part is really only needed when you are setting it up in a virtual machine and the host is the same as the cacher, but it doesn’t hurt to add it on real machines. That number, &lt;em&gt;3142&lt;/em&gt;, is the network port where the caching service is running, leave it unchanged.&lt;/p&gt;
+&lt;p&gt;After that, the first time you update a package in your network it will be slow just as before. But all the other machines updating the same package will be very fast. I have to thank &lt;em&gt;apt-cacher-ng&lt;/em&gt; for saving me many hours during my updates of the past years.&lt;/p&gt;
+&lt;div class="references"&gt;
+
+&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/setup-apt-cache/</guid><pubDate>Fri, 09 Dec 2016 01:43:13 GMT</pubDate></item></channel></rss>

@@ -1,0 +1,46 @@
+\documentclass[12pt]{article}
+
+\usepackage{cite}
+\usepackage{graphicx}
+
+\title{Development PC}
+
+\begin{document}
+
+\begin{verbatim}
+  sudo apt-get install bridge-utils byobu bzr bzr-builddeb emacs-nox enigmail gimp git gparted inkscape keepassx libvirt-bin lxd network-manager-openvpn-gnome nmap mosh openssh-server pep8 pyflakes python-mode python-ropemacs python-virtualenv python3-jedi qemu-kvm qemu-system quassel-client synergy ubuntu-restricted-extras ubuntu-vm-builder undistract-me virt-manager vlc workrave zsync
+\end{verbatim}
+
+\section{syncthing}
+
+\begin{verbatim}
+  curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
+  sudo sh -c 'echo deb http://apt.syncthing.net/ syncthing release > /etc/apt/sources.list.d/syncthing-release.list'
+  sudo apt-get update
+  sudo apt-get install syncthing
+\end{verbatim}
+
+\section{System76 drivers}
+
+\begin{verbatim}
+  sudo apt-add-repository -ys ppa:system76-dev/stable
+  sudo apt-get update
+  sudo apt-get install -y system76-driver
+\end{verbatim}
+
+\section{Spotify}
+
+\begin{verbatim}
+  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D2C19886
+  echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
+  sudo apt-get update
+  sudo apt-get install spotify-client
+\end{verbatim}
+
+\section{ssh}
+\begin{verbatim}
+  ssh-import-id elopio
+  sudo sed -i "/^[^#]*PasswordAuthentication[[:space:]]yes/c\PasswordAuthentication no" /etc/ssh/sshd_config
+\end{verbatim}
+
+\end{document}

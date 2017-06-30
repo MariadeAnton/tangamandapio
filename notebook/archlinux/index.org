@@ -1,0 +1,131 @@
+* Installation
+
+  (Based on https://wiki.archlinux.org/index.php/Installation_guide)
+
+
+  * Download the ISO from https://www.archlinux.org/download/
+
+  * Create a new KVM using the downloaded ISO, and 20G disk.
+
+  * Select Boot Arch Linux (x86_64)
+
+  * Test the network:
+
+    ping archlinux.org
+
+  * Update the system clock:
+
+    timedatectl set-ntp true
+
+  * Partition the disk:
+
+    fdisk /dev/sda
+
+    // root.
+
+    n
+    p
+    <enter>
+    <enter>
+    +19G
+
+    // swap.
+
+    n
+    p
+    <enter>
+    <enter>
+    <enter>
+    w
+
+  * Format the partitions:
+
+    mkfs.ext4 /dev/sda1
+
+    mkswap /dev/sda2
+
+  * Mount the filesystem:
+
+    mount /dev/sda1 /mnt
+
+  * Enable the swap:
+
+    swapon /dev/sda2
+
+  * Install the base packages:
+
+    pacstrap /mnt base
+
+  * Generate fstab:
+
+    genfstab -U /mnt >> /mnt/etc/fstab
+
+  * Add the swap to /mnt/etc/fstab:
+
+    echo "UUID=$(lsblk -no UUID /dev/sda2) none swap defaults 0 0" >> /mnt/etc/fstab
+
+  * Change chroot:
+
+    arch-chroot /mnt
+
+  * Set the timezone:
+
+    ln -s /usr/share/zoneinfo/America/Costa_Rica /etc/localtime
+
+  * Generate /etc/adjtime:
+
+    hwclock --systohc
+
+  * Generate locales:
+
+    sed -i "s/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" /etc/locale.gen
+
+    locale-gen
+
+    echo "LANG=en_US.UTF-8" > /etc/locale.conf
+
+  * Set hostname:
+
+    echo "archlinux" > /etc/hostname
+
+  * Set root password:
+
+    passwd
+
+  * Install grub:
+
+    pacman -S grub
+
+    grub-install --target=i386-pc /dev/sda
+
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+  * Reboot:
+
+    exit
+
+    umount -R /mnt
+
+    reboot
+
+* Configuration
+
+  * Create user:
+
+    useradd -m -G wheel -s /bin/bash elopio
+
+    passwd elopio
+
+  * Set up sudo:
+
+    packman -S sudo
+
+    visudo
+
+    Uncomment the line with:
+
+    %wheel      ALL=(ALL) ALL
+
+    exit
+
+    Login as the create user.

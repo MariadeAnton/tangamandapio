@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="eo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>On writing my first snaps, and keeping my passwords secure everywhere | Tangamandapio</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS (en)" href="../../../rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (eo)" href="../../rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (es)" href="../../../es/rss.xml">
+<link rel="canonical" href="http://elopio.net/eo/blog/first-snaps/">
+<!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Leo Arias">
+<link rel="prev" href="../convert-cbr-to-pdf/" title="Convert cbr files to pdf" type="text/html">
+<link rel="next" href="../download-ubuntu/" title="Download the latest Ubuntu LTS" type="text/html">
+<meta property="og:site_name" content="Tangamandapio">
+<meta property="og:title" content="On writing my first snaps, and keeping my passwords secure everywhere">
+<meta property="og:url" content="http://elopio.net/eo/blog/first-snaps/">
+<meta property="og:description" content="I’ve been writing snaps for a year, more or less. But all the snaps I had written were a one-time thing to reproduce a bug, automate a scenario, or explore a specific code path. A few months ago I dec">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2016-07-01T09:00:00-06:00">
+<meta property="article:tag" content="free software">
+<meta property="article:tag" content="keepass">
+<meta property="article:tag" content="snappy">
+<meta property="article:tag" content="ubuntu">
+<link rel="alternate" hreflang="en" href="../../../blog/first-snaps/">
+<link rel="alternate" hreflang="es" href="../../../es/blog/first-snaps/">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Salti al ĉefenhavo</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Ŝalti menuon</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://elopio.net/eo/">
+
+                <span id="blog-title">Tangamandapio</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../archive.html">Arĥivo</a>
+                </li>
+<li>
+<a href="../../categories/">Etikedoj</a>
+                </li>
+<li>
+<a href="../../rss.xml">RSS feed</a>
+                </li>
+<li>
+<a href="../../../notebook">Notlibro</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+            </li>
+<li><a href="http://elopio.net/" rel="alternate" hreflang="en">English</a></li>
+            <li><a href="http://elopio.net/es/" rel="alternate" hreflang="es">Español</a></li>
+
+                
+                    
+    <li>
+    <a href="index.tex" id="sourcelink">Fonto</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">On writing my first snaps, and keeping my passwords secure everywhere</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                    Leo Arias
+            </span></p>
+            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2016-07-01T09:00:00-06:00" itemprop="datePublished" title="2016-07-01 09:00">2016-07-01 09:00</time></a></p>
+            
+        <p class="sourceline"><a href="index.tex" class="sourcelink">Fonto</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <p>I’ve been writing snaps for a year, more or less. But all the snaps I had written were a one-time thing to reproduce a bug, automate a scenario, or explore a specific code path. A few months ago I decided to write one snap that I would use day-to-day. The application I use the most by far is keepass, so that seemed like a good place to start.</p>
+<h1 id="kpcli">kpcli</h1>
+<p>With <a href="https://github.com/alecsammon/kpcli">kpcli</a> I access my password database from the command line. It’s just one big perl script, but not as ugly as it sounds :) That was a great first experiment because I haven’t tried perl in a snap before, and it would let me access the passwords from my beagle bone black in a secure and confined way.</p>
+<p>Because it is a script, I just need to copy it into the snap. Of course, there’s a plugin for that! <a href="http://snapcraft.io/">snapcraft</a> is a meta-packaging tool to generate snaps. It comes with plugins for many packaging tools, <em>copy</em> being the most simple of them. Run:</p>
+<pre><code>  $ sudo apt install snapcraft
+  $ snapcraft help copy</code></pre>
+<p>The next step is to look at the dependencies. Luckily, they are right there in the <a href="https://github.com/alecsammon/kpcli/blob/master/README.md">README</a> file, in the form of Ubuntu packages. snapcraft calls them <em>stage-packages</em>, and they will be installed into the snap during the build.</p>
+<p>Now I have almost all the difficult details to make the snap, and it was surprisingly easy. With this information, I wrote a part (<a href="http://snapcraft.io/create/#parts-intro">read more about parts</a>):</p>
+<pre><code>  kpcli:
+    source: https://github.com/alecsammon/kpcli.git
+    plugin: copy
+    files:
+      kpcli.pl: scripts/kpcli.pl
+    stage-packages:
+      - perl-base
+      - libcrypt-rijndael-perl
+      - libterm-readkey-perl
+      - libsort-naturally-perl
+      - libfile-keepass-perl
+      - libterm-shellui-perl
+      - libterm-readline-gnu-perl
+      - libclone-perl</code></pre>
+<p>I am just missing a way to tell the command where to find the perl libraries that I am bundling inside the snap. There is <a href="https://bugs.launchpad.net/snapcraft/+bug/1583259">work in progress</a> to make it easier to set up environment variables before launching the command; but for my first simple snap, quick and easy will do. I wrote a wrapper script:</p>
+<pre><code>  #!/bin/sh
+
+  $SNAP/usr/bin/perl -I $SNAP/usr/share/perl/5.22 -I $SNAP/usr/lib/x86_64-linux-gnu/perl/5.22 -I $SNAP/usr/lib/x86_64-linux-gnu/perl5/5.22 -I $SNAP/usr/share/perl5 $SNAP/scripts/kpcli.pl</code></pre>
+<p>and the corresponding part:</p>
+<pre><code>  launcher:
+    plugin: copy
+    files:
+      run.sh: scripts/run.sh</code></pre>
+<p>Finally, I added details about the <em>name</em>, <em>version</em>, <em>summary</em> and <em>description</em> of the snap, and defined the kpcli <em>app</em>. You can <a href="https://github.com/ubuntu/snappy-playpen/blob/master/kpcli/snapcraft.yaml">download the source of this snapcraft.yaml</a>, put it in a directory and run <strong>snapcraft</strong> in there to generate it yourself. Or try mine installing it from the store:</p>
+<pre><code>  $ sudo snap install kpcli-elopio
+  $ kpcli-elopio.kpcli</code></pre>
+<h1 id="keepassx">KeepassX</h1>
+<p>Ok, that solves command line access, but I also want some eye-candy, sometimes. <a href="https://github.com/keepassx/keepassx.git">KeepassX</a> gives me access to the same passwords database through a GUI. By the time I finished my CLI snap I saw work from <a href="https://kyrofa.com/">kyrofa</a>, <a href="http://blog.sergiusens.org">sergiusens</a> and <a href="http://davidplanella.org/">dpm</a> to make it easy to snap desktop apps and use them in Ubuntu classic. I also was at a sprint sitting next to <a href="https://launchpad.net/~attente">attente</a>, who knows everything I didn’t know about the desktop, so it was a great time to enter the world of collaborative snapping.</p>
+<p>Let me digress here for a moment to talk about collaboration. <strong>snapcraft</strong> and <strong>snapd</strong> are free software, and a lot of their design is based on the idea that the system can be extended and improved through the shared work of many and diverse developers. <strong>snapcraft</strong> aims to be the universal packaging tool, and <strong>plugins</strong> are the way we integrate the wild variety of build systems into the lifecycle to generate a snap. KeepassX is more complex than the CLI client, and it uses <em>cmake</em> to generate the executable. Well, guess what? There’s a plugin for that! :) (<a href="https://github.com/snapcore/snapcraft/blob/master/snapcraft/plugins/cmake.py">see the source of the cmake plugin</a>). Also, this application uses the QT5 UI libraries. Just like with the kpcli snap, that means I will require to set up some environment variables and a launcher; but somebody else already did that and we have a way to share and reuse <strong>parts</strong>. Run:</p>
+<pre><code>  $ snapcraft update
+  $ snapcraft search qt5
+  $ snapcraft define qt5conf</code></pre>
+<p>There’s a part for that!! And when this application is running, I would like it to be integrated with <em>unity7</em>, if available. That means I would need a few extra permissions for my isolated app to access the unity7 services and libraries installed in a classic Ubuntu system. I’m a lucky guy because there’s an interface for that!!! (<a href="https://github.com/snapcore/snapd/blob/master/interfaces/builtin/unity7.go">see the source of the unity7 interface</a>) By default, snaps will be fully confined and won’t be able to access anything they don’t provide by themselves. Through <strong>interfaces</strong>, we allow snaps to get extra permissions to consume services, access devices and directories, and do anything that you could do in a classic unconfined Linux system; but now in a controlled manner with the explicit acknowledgement of the user for sensitive stuff. Run:</p>
+<pre><code>  $ snap interfaces</code></pre>
+<p>We have plugins, parts and interfaces for the most common cases of the most common apps. But the fun is just starting, and there are lots and lots of apps out there that would benefit from the controlled dependencies, usable security and transactional updates of snaps. We celebrate when we get new people into the team, so if you want to participate and influence the future of this shiny project, we can help you getting started <a href="https://developer.ubuntu.com/en/blog/2016/06/08/snappy-playpen-kickoff-highlights/">in the playpen</a>.</p>
+<p>One last detail about collaboration is the relation with upstreams and distribution maintainers. Snapping free software projects is a pleasure because the source is available for us to inspect and decide on the best strategy to build the snap. Then we spread the apps to more people, we get more feedback and in many cases we end up sending patches to improve the upstream project. And I already mentioned the use of Ubuntu packages during the build of the snaps. With this we bootstrap from the awesome work that the <strong>Debian</strong> and <strong>Ubuntu</strong> communities are doing, and we’ll keep benefitting from both sides as we need debs to build some snaps, and the two play nicely together.</p>
+<p>Aaaand back on track, because with all the work shared by the community this KeepassX snap is almost done by itself, but not quite.</p>
+<p>I start by creating a new <em>snapcraft.yaml</em> file an defining the snap details:</p>
+<pre><code>  name: keepassx-elopio
+  version: "2.0.2"
+  summary: KeePassX is a cross platform password safe
+  description: |
+    KeePassX is an application for people with extremly high demands on secure
+    personal data management. It has a light interface, is cross platform and
+    published under the terms of the GNU General Public License.</code></pre>
+<p>Next, the app:</p>
+<pre><code>  apps:
+    keepassx:
+      command: qt5-launch keepassx
+      plugs: [unity7, opengl]</code></pre>
+<p>Take a look at that qt5-launch, which is provided from the shared qt <strong>part</strong> that I will reference in a few lines. <em>keepassx</em> is a binary that lives inside the snap, and that we will compile using a <em>snapcraft</em> <strong>plugin</strong>. Also look at those plugs. That’s how we tell the system that a snap wants to consume an <strong>interface</strong> slot of the same name.</p>
+<p>Followed by the parts:</p>
+<pre><code>  parts:
+    keepassx:
+      source: https://github.com/keepassx/keepassx.git
+      source-tag: 2.0.2
+      plugin: cmake
+      build-packages:
+        - g++
+        - qtbase5-dev
+        - libqt4-dev
+        - libqt5x11extras5-dev
+        - qttools5-dev
+        - qttools5-dev-tools
+        - libgcrypt20-dev
+        - zlib1g-dev
+      stage-packages:
+        - libgtk2.0-0
+        - libqt5gui5
+        - unity-gtk2-module
+        - appmenu-qt5
+        - dconf-gsettings-backend
+      after: [qt5conf]</code></pre>
+<p>Note the new <em>build-packages</em> section. Those packages will not end up in the snap, they are only used during the compilation so they will be installed in the host where you are running <em>snapcraft</em>. I already discussed about the <em>stage-packages</em>, nothing new to see there. Now the <em>after</em> keyword is where a lot of the collaboration magic happens. It means that my <em>keepassx</em> part depends on the <em>qt5conf</em> part. But I don’t define the <em>qt5conf</em> part in my yaml file, so snapcraft will bring it from the pool of shared parts (<a href="https://github.com/dplanella/qt5conf">see the source of the qt5conf part</a>). I love this because I didn’t have to write any of the qt complications, and when a qt expert makes a change to improve it, I just need to run snapcraft again and my snap will be better with no effort. This is where the <em>qt5-launch</em> I used in the apps section comes from.</p>
+<p>I finish my yaml adding a last part:</p>
+<pre><code>  ...
+  parts:
+    keepassx:
+      ...
+    glibcompiledassets:
+      plugin: copy
+      files:
+        gschemas.compiled: usr/share/glib-2.0/schemas/gschemas.compiled
+        giomodule.cache: usr/lib/x86_64-linux-gnu/gio/modules/giomodule.cache</code></pre>
+<p>This is required to save the KeepassX settings. It’s currently not a nice way to include the compiled files in the snap, and we are discussing about how to improve it, so I won’t dig too much here. It shows how simple yet flexible snaps are: you can put anything into the snap, it doesn’t matter how you got it. But it also shows that we have things to improve, so let me insist on my invitation for you to join our project. If there’s something you hate, this is the right time to change it. If there’s something you like, there’s always room to improve it. <a href="http://media-cache-ak0.pinimg.com/736x/d7/cf/6e/d7cf6e3ec423dd7a02cc70a0aba8d99d.jpg">We have cookies</a>.</p>
+<p>Punto final, café con tamal. Give it a try:</p>
+<pre><code>  $ sudo snap install keepassx-elopio
+  $ keepassx-elopio.keepassx</code></pre>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/EkrankopioDe2016-07-0111-48-23.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/EkrankopioDe2016-07-0111-48-23.png" alt="image"></a></p>
+<div class="references">
+
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/free-software/" rel="tag">free software</a></li>
+            <li><a class="tag p-category" href="../../categories/keepass/" rel="tag">keepass</a></li>
+            <li><a class="tag p-category" href="../../categories/snappy/" rel="tag">snappy</a></li>
+            <li><a class="tag p-category" href="../../categories/ubuntu/" rel="tag">ubuntu</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../convert-cbr-to-pdf/" rel="prev" title="Convert cbr files to pdf">Antaŭa artikolo</a>
+            </li>
+            <li class="next">
+                <a href="../download-ubuntu/" rel="next" title="Download the latest Ubuntu LTS">Venonta artikolo</a>
+            </li>
+        </ul></nav></aside></article>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a>Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a>
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("eo");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>

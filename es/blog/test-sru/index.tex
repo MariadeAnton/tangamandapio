@@ -1,0 +1,134 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+
+\title{Test a stable release update}
+
+\begin{document}
+
+Ubuntu has a six month cycle for releases. This means that we work for six
+months updating software, adding new features and making sure that it all works
+consistently together when it's integrated into the operating system, and then
+we release it. Once we make a release, it is considered stable and then we
+almost exclusively add to that release critical bug fixes and patches for security
+vulnerabilities. The exceptions are just a few, and are for software that's
+important for Ubuntu and that we want to keep up-to-date with the latest
+features even in stable releases.
+
+These bug fixes, security patches and exceptional new features require a lot of
+testing, because right after they are published they will reach all the Ubuntu
+users that are in the stable release. And we want the release to remain stable,
+never ever introduce a regression that will make those users unhappy.
+
+We call all of them
+\href{https://wiki.ubuntu.com/StableReleaseUpdates}{Stable Release Updates},
+and we test them in the \emph{proposed} pocket of the Ubuntu archive. This is
+obviously not enabled by default, so the brave souls that want to help us
+testing the changes in proposed need to enable it.
+
+Before we go on, I would recommend to test SRUs
+\href{http://elopio.net/blog/install-ubuntu-in-vm/}
+     {in a virtual machine}.
+Once you enable proposed following this guide you will get constant and untested
+updates from many packages, and these updates will break parts of your system
+every now and then. It's not likely to be critical, but it can bother you if it
+happens on the machine you need to do your work, or other stuff. And if
+somebody makes a mistake, you might need to reinstall the system.
+
+You will also have to find a package that needs testing.
+\href{http://snapcraft.io}{Snapcraft} is one of the few exceptions allowed to
+land in a stable release every week. So lets use it as an example. Lets say you
+want to help us testing the upcoming release of snapcraft in Ubuntu 16.04.
+
+With your machine ready and before enabling proposed, install the version
+already released of the package you want to test. This way you'll test later an
+update to the newer version, just what a normal user would get once the update
+is approved and lands in the archive. So in a terminal, write:
+
+\begin{verbatim}
+  $ sudo apt update
+  $ sudo apt install snapcraft
+\end{verbatim}
+
+Or replace \emph{snapcraft} with whatever package you are testing. If you are
+doing it just during the weekend after I am writing this, the released
+version of snapcraft will be 2.23. You can check it with:
+
+\begin{verbatim}
+  $ dpkg -s snapcraft | grep Version
+  Version: 2.23
+\end{verbatim}
+
+Now, to enable proposed, open the \emph{Ubuntu Software} application, and
+select \emph{Software & Updates} from the menu in the top of the window.
+
+\begin{center}
+  \href{
+    https://archive.org/download/elopio-screenshots2/sru/1-open_sources.png}{
+    \includegraphics[width=500px]{
+    https://archive.org/download/elopio-screenshots2/sru/1-open_sources.png}
+  }
+  \caption{Ubuntu Software application}
+\end{center}
+
+From the \emph{Software & Updates} window, select the \emph{Developer Options}
+tab. And check the item that says \emph{Pre-released updates}.
+
+\begin{center}
+  \href{
+    https://archive.org/download/elopio-screenshots2/sru/2-enable_proposed.png}{
+    \includegraphics[width=500px]{
+    https://archive.org/download/elopio-screenshots2/sru/2-enable_proposed.png}
+  }
+  \caption{Deverloper Options tab of the Software & Updates application}
+\end{center}
+
+This will prompt for your password. Enter it, and then click the
+\emph{Close} button. You will be asked if you want to reload your sources, so
+yes, click the \emph{Reload} button.
+
+\begin{center}
+  \href{
+    https://archive.org/download/elopio-screenshots2/sru/3-reload.png}{
+    \includegraphics[width=500px]{
+    https://archive.org/download/elopio-screenshots2/sru/3-reload.png}
+  }
+  \caption{Reload sources}
+\end{center}
+
+Finally try to upgrade. If there is a newer version available in the proposed
+pocket for the packet you are testing, now you will get it.
+
+\begin{verbatim}
+  $ sudo apt install snapcraft
+  $ dpkg -s snapcraft | grep Version
+  Version: 2.24
+\end{verbatim}
+
+Every time there is a proposed update, the package will have corresponding SRU
+bugs with the tag "verification-needed". In the case of snapcraft this weekend,
+this is the bug for the 2.24 proposed update:
+\href{https://bugs.launchpad.net/ubuntu/+source/snapcraft/+bug/1650632}
+     {https://bugs.launchpad.net/ubuntu/+source/snapcraft/+bug/1650632}
+
+The SRU bugs will have instructions about how to test that the fix or the new
+features released are correct. Follow those steps, and if you are confident
+that they work as expected, change the tag to "verification-done". If you find
+that the fix is not correct, change the tag to "verification-failed". In case
+of doubt, you can leave a comment in the bug explaining what you tried and what
+you found.
+
+You can read more about SRUs in the
+\href{https://wiki.ubuntu.com/StableReleaseUpdates}
+     {Stable Release Updates wiki page},
+and also in the
+\href{https://wiki.ubuntu.com/QATeam/PerformingSRUVerification}
+     {wiki page explaining how to perform verifications}.
+This last page includes a section to find packages and bugs that need
+verification. If you want to help the Ubuntu community, you can just jump in
+and start verifying some of the pending bugs. It will be highly appreciated.
+
+If you have questions or find a problem, join us in the
+\href{https://rocket.ubuntu.com/channel/community}{Ubuntu Rocket Chat}.
+
+\end{document}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../../assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Tangamandapio (Publicaciones sobre comics)</title><link>http://elopio.net/</link><description></description><atom:link rel="self" type="application/rss+xml" href="http://elopio.net/es/categories/comics.xml"></atom:link><language>es</language><lastBuildDate>Fri, 30 Jun 2017 10:45:53 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Convert cbr files to pdf</title><link>http://elopio.net/es/blog/convert-cbr-to-pdf/</link><dc:creator>Leo Arias</dc:creator><description>&lt;p&gt;Here’s a quick tip. Generally when some of my good internet pirate friends share with me a comic book,&lt;a href="http://elopio.net/es/blog/convert-cbr-to-pdf/#fn1" class="footnoteRef" id="fnref1"&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt; it comes in the &lt;code&gt;cbr&lt;/code&gt; format. There is no application for my &lt;a href="https://insights.ubuntu.com/2015/06/24/meizu-launches-the-mx4-ubuntu-edition-in-europe/"&gt;Ubuntu phone&lt;/a&gt; to read these files (yet), but there are some good &lt;code&gt;pdf&lt;/code&gt; readers. All I have to do is convert the files with some handy terminal commands.&lt;/p&gt;
+&lt;p&gt;A &lt;code&gt;cbr&lt;/code&gt; file is just a group of image files compressed in the &lt;code&gt;rar&lt;/code&gt; format. So, let’s uncompress the files in a temporary directory:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  dir=$(mktemp -d)
+  cd $dir
+  unrar x /path/to/file.cbr&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And then let’s convert them to pdf:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  convert * /path/to/file.pdf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Open the &lt;code&gt;pdf&lt;/code&gt; to check it is OK:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  evince /path/to/file.pdf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And delete the temporary directory:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  cd ..
+  rm -rf $dir&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Transfer to the phone, and enjoy.&lt;/p&gt;
+&lt;div class="references"&gt;
+
+&lt;/div&gt;
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id="fn1"&gt;&lt;p&gt;Remember, &lt;a href="http://kswp.org/wp/wp-content/uploads/2013/02/sharing-is-caring.jpg"&gt;sharing is caring&lt;/a&gt;&lt;a href="http://elopio.net/es/blog/convert-cbr-to-pdf/#fnref1"&gt;↩&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description><guid>http://elopio.net/es/blog/convert-cbr-to-pdf/</guid><pubDate>Wed, 16 Mar 2016 18:41:35 GMT</pubDate></item></channel></rss>

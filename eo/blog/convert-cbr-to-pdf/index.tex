@@ -1,0 +1,47 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+
+\title{Convert cbr files to pdf}
+
+\begin{document}
+
+Here's a quick tip. Generally when some of my good internet pirate friends
+share with me a comic book
+\footnote{Remember, \href{http://kswp.org/wp/wp-content/uploads/2013/02/sharing-is-caring.jpg}
+  {sharing is caring}},
+it comes in the \verb$cbr$ format. There is no application for my \href{https://insights.ubuntu.com/2015/06/24/meizu-launches-the-mx4-ubuntu-edition-in-europe/}
+{Ubuntu phone} to read these files (yet), but there are some good \verb$pdf$
+readers. All I have to do is convert the files with some handy terminal commands.
+
+A \verb$cbr$ file is just a group of image files compressed in the \verb$rar$
+format. So, let's uncompress the files in a temporary directory:
+
+\begin{verbatim}
+  dir=$(mktemp -d)
+  cd $dir
+  unrar x /path/to/file.cbr
+\end{verbatim}
+
+And then let's convert them to pdf:
+
+\begin{verbatim}
+  convert * /path/to/file.pdf
+\end{verbatim}
+
+Open the \verb$pdf$ to check it is OK:
+
+\begin{verbatim}
+  evince /path/to/file.pdf
+\end{verbatim}
+
+And delete the temporary directory:
+
+\begin{verbatim}
+  cd ..
+  rm -rf $dir
+\end{verbatim}
+
+Transfer to the phone, and enjoy.
+
+\end{document}

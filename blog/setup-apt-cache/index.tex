@@ -1,0 +1,75 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+
+\title{Set up a cache for deb packages}
+
+\begin{document}
+
+All Linux distributions are constantly updating the versions of the packages in
+their archives. That's what makes them great, lots of people working in a
+distributed way to let you easily update your software and get the latest
+features or critical bug fixes.
+
+And you should constatly update your operating system. Otherwise you'll become
+an easy target for criminals exploiting known vulnerabilities.
+
+The problem, at least for me, is that I have many many Ubuntu machines in the
+house and my badwidth is really bad. So keeping all my real machines, virtual
+machines and various devices up-to-date every day has become a slow problem.
+
+The solution is to cache the downloaded deb packages. So only one machine has
+to make the downloads from the internet, and they will be kept in my local
+network to make much faster to get the packages in the other machines.
+
+So let me introduce you to
+\href{https://www.unix-ag.uni-kl.de/~bloch/acng/}{Apt-Cacher NG}.
+
+Setting it up is simple. First, choose a machine to run the cacher and store
+the packages. Ideally, this machine should be running all the time, and should
+have a good amount of storage space. I'm using my desktop as the cacher; but as
+soon as I update my router to one that runs Ubuntu, I will make that one the
+cacher.
+
+On that machine, install apt-cacher-ng:
+
+\begin{verbatim}
+  sudo apt install apt-cacher-ng
+\end{verbatim}
+
+And that's it. The cacher is installed and configured. Now we need the name
+of this machine to use it on the other ones:
+
+\begin{verbatim}
+  $ hostname
+  calchas
+\end{verbatim}
+
+In this example, \emph{calchas} is the name of the machine I'm using as the
+cacher. Take note of the name of your machine, and now, in all the other
+machines:
+
+\begin{verbatim}
+  $ sudo gedit /etc/apt/apt.conf.d/02proxy
+\end{verbatim}
+
+That will create a new empty configuration file for \emph{apt}, and open it to
+be edited with \emph{gedit}, the default graphical editor in Ubuntu. In the
+editor, write this:
+
+\begin{verbatim}
+  Acquire::http::proxy "http://calchas.lan:3142";
+\end{verbatim}
+
+replacing \emph{calchas} with the name of your cacher machine, collected above.
+The \emph{.lan} part is really only needed when you are setting it up in a
+virtual machine and the host is the same as the cacher, but it doesn't hurt to
+add it on real machines. That number, \emph{3142}, is the network port where
+the caching service is running, leave it unchanged.
+
+After that, the first time you update a package in your network it will be slow
+just as before. But all the other machines updating the same package will be
+very fast. I have to thank \emph{apt-cacher-ng} for saving me many hours during
+my updates of the past years.
+
+\end{document}

@@ -1,0 +1,52 @@
+* golang
+
+  [[http://blog.labix.org/2011/10/09/death-of-goroutines-under-control][Death of goroutines under control]]
+
+  [[http://garrett.damore.org/2015/09/on-go-portability-and-system-interfaces.html?utm_source%3Dgolangweekly&utm_medium%3Demail][On Go, Portability, and System Interfaces]]
+
+* anonymity
+
+  [[http://www.hit.bme.hu/~buttyan/courses/BMEVIHIM219/2009/Chaum.BlindSigForPayment.1982.PDF][Blind signatures for untraceable payments]]
+
+  [[http://arxiv.org/pdf/1107.4524v2.pdf][An Analysis of Anonymity in the Bitcoin System]]
+
+  [[http://users.encs.concordia.ca/~clark/papers/2014_fc.pdf][Mixcoin: Anonymity for Bitcoin with Accountable Mixes]]
+
+  [[http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber%3D6547123][Zerocoin: Anonymous Distributed E-Cash from Bitcoin]]
+
+  [[http://zerocash-project.org/media/pdf/zerocash-extended-20140518.pdf][Zerocash:  Decentralized Anonymous Payments from Bitcoin]]
+
+  [[http://delivery.acm.org/10.1145/2820000/2815417/p137-hooff.pdf?ip%3D201.192.159.160&id%3D2815417&acc%3DOA&key%3D4D4702B0C3E38B35.4D4702B0C3E38B35.4D4702B0C3E38B35.0ADCD7F6301350A9&CFID%3D568281315&CFTOKEN%3D54054114&__acm__%3D1450140664_e7d3803693adfbbd4fd1e0ccf9da91b2][Vuvuzela: Scalable Private Messaging Resistant to Traffic Analizis]]
+
+  [[http://people.csail.mit.edu/devadas/pubs/riffle.pdf][Riffle]]
+
+* vms
+
+  [[http://eprints.gla.ac.uk/107266/1/107266.pdf][Cloud Computing Resource Scheduling and a Survey of its Evolutionary Approaches]]
+  [[https://www.stgraber.org/2016/03/11/lxd-2-0-blog-post-series-012/][LXD]]
+
+* distributed
+
+  [[https://github.com/tendermint/tendermint/wiki][Tendermint - Byzantine fault tolerant blockchain stack]]
+
+  [[https://eng.erisindustries.com/tutorials/2015/03/11/solidity-1/][Solidity - Smart Contracts]]
+
+  [[http://www.triple-c.at/index.php/tripleC/article/view/728][Towards a (De)centralization-Based Typology of Peer Production]]
+
+  [[https://lwn.net/Articles/646054/][Containers and persistent data]]
+
+  [[https://raft.github.io/raft.pdf][raft]]
+
+  [[https://research.microsoft.com/en-us/um/people/lamport/tla/hyperbook.html][tla hyperbook]]
+
+* QA
+
+  [[http://www.developsense.com/blog/2009/08/testing-vs-checking/][Testing vs. Checking]]
+
+* security
+
+  [[http://blog.invisiblethings.org/papers/2015/state_harmful.pdf][State considered harmful]]
+  [[http://static.usenix.org/legacy/events/sec09/tech/full_papers/sec09_browser.pdf][Crying Wolf: An Empirical Study of SSL Warning Effectivenes]]
+* linux
+
+  [[https://lwn.net/Articles/531114/#series_index][namespaces]]

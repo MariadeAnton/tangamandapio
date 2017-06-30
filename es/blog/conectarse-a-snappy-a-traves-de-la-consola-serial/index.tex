@@ -1,0 +1,148 @@
+\documentclass[12pt]{article}
+
+\usepackage{cite}
+\usepackage{graphicx}
+
+\title{Conectarse a Snappy a través de la consola serial}
+
+\begin{document}
+
+Estoy trabajando en \href{https://developer.ubuntu.com/en/snappy/}
+{Snappy Ubuntu} con un BeagleBone Black Rev C y un Raspberry Pi 2. Es posible
+conectarse a los dispositivos a través de la consola serial para monitorear
+errores durante el arranque y para controlar el sistema. Luego de mi primer
+cable quemado, decidí escribir las instrucciones para conectar los cables y así
+reducir la probabilidad de que mis dispositivos prendan fuego.
+
+Lo primero, por supuesto, es
+\href{https://developer.ubuntu.com/en/snappy/start/}
+{instalar snappy en la tarjeta SD}. Luego, comprar uno de estos
+\href{http://www.adafruit.com/products/954}{cables FTDI} que convierten de USB
+a serial. Este cable se puede usar en ambos dispositivos porque tiene los
+conectores separados. El cable \emph{negro} es \textbf{tierra} (GND), el cable
+\emph{blanco} es para \textbf{recibir datos en el puerto USB}, el cable
+\emph{verde} es para \textbf{transmitir datos desde el puerto USB} ye el cable
+\emph{rojo} es de \textbf{corriente eléctrica de 5V}.
+
+\section{BeagleBone Black}
+
+El \href{https://www.adafruit.com/product/1876}{BeagleBone Black Rev C} tiene 6
+pines. Hay un punto blanco al lado del primer pin. Conecte el cable negro GND
+al primer pin, el cable verde al cuarto pin y el cable blanco al quinto pin.
+En el BeagleBone\textbf{NUNCA conecte el cable rojo}.
+
+\begin{center}
+  \href{
+    https://ia601501.us.archive.org/11/items/snappy-bbb/1-board-serial-pins-compress.jpg}{
+    \includegraphics[width=500px]{
+      https://ia601501.us.archive.org/11/items/snappy-bbb/1-board-serial-pins-compress.jpg}
+  }
+  \caption{BeagleBone con los pines seriales resaltados}
+\end{center}
+
+\begin{center}
+  \href{
+    https://ia601501.us.archive.org/11/items/snappy-bbb/2-1-serial_cables.jpg}{
+    \includegraphics[width=500px]{
+      https://ia601501.us.archive.org/11/items/snappy-bbb/2-1-serial_cables.jpg}
+  }
+  \capation{BeagleBone con los cables conectados}
+\end{center}
+
+\section{Raspberry Pi}
+
+El \href{https://www.adafruit.com/products/2358}{Raspberry Pi 2 Model B} tiene
+40 pines. \href{http://www.pighixxx.com/test/2015/06/raspberry-pi-v2-mod-b-pinout/#prettyPhoto[gallery1105]/0/}
+{Aquí} hay un bonito dibujo del pinout con los números y las funciones de los
+pines.
+
+Conecte el cable negro GND al sexto pin, el cable blanco al octavo pin y el
+cable verde al décimo pin. De forma opcional puede darle corriente al Raspberry
+conectando el cable rojo al segundo pin, pero si hace esto NO conecte el cable
+de poder USB porque \textbf{no es posible usar ambas fuentes de poder}.
+
+\begin{center}
+  \href{
+    https://ia601502.us.archive.org/29/items/image20150609_054825862/6-pins-highlight.jpg}{
+    \includegraphics[width=500px]{
+      https://ia601502.us.archive.org/29/items/image20150609_054825862/6-pins-highlight.jpg}
+  }
+  \caption{Raspberry con los pines seriales resaltados}
+\end{center}
+
+\begin{center}
+  \href{
+    https://ia601502.us.archive.org/29/items/image20150609_054825862/7-serial.jpg}{
+    \includegraphics[width=500px]{
+      https://ia601502.us.archive.org/29/items/image20150609_054825862/7-serial.jpg}
+  }
+  \caption{Raspberry con los calbes conectados}
+\end{center}
+
+\section{Consola serial}
+
+Instale screen:
+
+\begin{verbatim}
+  sudo apt-get install screen
+\end{verbatim}
+
+Conecte el otro extremo del cable a un puerto USB de su computadora y busque el
+nombre del dispositivo tty:
+
+\begin{verbatim}
+  ls /dev/ttyUSB*
+\end{verbatim}
+
+Inicie la sesión de screen en la terminal serial, reemplazando
+\verb$/dev/ttyUSB?$ con el número de su dispositivo.
+
+\begin{verbatim}
+  sudo screen {/dev/ttyUSB?} 115200
+\end{verbatim}
+
+Por último, inserte la tarjeta SD y conecte el cable de poder de su
+dispositivo. Ahora podrá ver los mensajes de arranque en la termina, y al final
+snappy le permitirá inciar la sesión. El usuario predeterminado es
+\emph{ubuntu} y la contraseña predeterminada también es \emph{ubuntu}.
+
+\begin{center}
+  \href{
+    https://ia601501.us.archive.org/11/items/snappy-bbb/6-booted.png}{
+    \includegraphics[width=500px]{
+      https://ia601501.us.archive.org/11/items/snappy-bbb/6-booted.png}
+  }
+  \caption{Consola serial iniciada}
+\end{center}
+
+Snappy tiene un servidor SSH preinstalado. Una vez que el arranque ha sido
+exitoso, se puede iniciar sesión a través de SSH, lo que nos da una mejor
+experiencia. Esta terminal serial se puede usar para obtener la dirección IP
+del dispositivo:
+
+\begin{verbatim}
+  ip addr show
+\end{verbatim}
+
+Y desde una terminal diferente, reemplazando \verb$ip$ con la dirección IP del
+dispositivo:
+
+\begin{verbatim}
+  ssh ubuntu@{ip}
+\end{verbatim}
+
+Ahora estamos listos para empezar a jugar con snappy en el dispositivo. No se
+pierdan del
+\href{https://developer.ubuntu.com/en/snappy/tutorials/using-snappy/}{tour}.
+
+Para salir de la consola serial, presione \verb$CTRL+a$ y luego \verb$k$.
+
+\subsection{Más información sobre los cables y la consola serial}
+
+\begin{itemize}
+  \item \url{http://elinux.org/Beagleboard:BeagleBone_Black_Serial}
+  \item \url{https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/connect-the-lead}
+  \item \url{http://dave.cheney.net/2013/09/22/two-point-five-ways-to-access-the-serial-console-on-your-beaglebone-black}
+\end{itemize}
+
+\end{document}

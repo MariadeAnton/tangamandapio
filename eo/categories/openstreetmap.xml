@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../../assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Tangamandapio (Artikoloj pri openstreetmap)</title><link>http://elopio.net/</link><description></description><atom:link rel="self" type="application/rss+xml" href="http://elopio.net/eo/categories/openstreetmap.xml"></atom:link><language>eo</language><lastBuildDate>Fri, 30 Jun 2017 10:45:52 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Mapperspace #2: Poas Volcano</title><link>http://elopio.net/eo/blog/mapperspace-poas/</link><dc:creator>Leo Arias</dc:creator><description>&lt;div&gt;&lt;p&gt;Last Sunday we went to the
+&lt;a href="https://en.wikipedia.org/wiki/Po%C3%A1s_Volcano"&gt;Poás Volcano&lt;/a&gt;
+to make free maps.&lt;/p&gt;
+&lt;iframe width="640" height="480" src="https://embed-v1.mapillary.com/embed?version=1&amp;amp;filter=%5B%22all%22%5D&amp;amp;map_filter=%5B%22all%22%5D&amp;amp;image_key=BHp7eM8RAbbhkLWc6XyR6g&amp;amp;client_id=WHJxWW40RWhyVGR6ajVEci1saHZNUTozZDQ5NjRmM2I4ZjBiNjc2&amp;amp;style=photo" frameborder="0"&gt;&lt;/iframe&gt;
+
+&lt;p&gt;This is the second geek outing of the JaquerEspéis. From the first one we
+learned that we had to wait until summer because
+&lt;a href="https://archive.org/download/jaquerespeis-mapas/photo484953803566260.jpg"&gt;it's not possible to make maps during a storm&lt;/a&gt;.
+And the day was perfect. It wasn't just sunny, but the crater was totally clear
+and thus we could add a new spot of Costa Rica to the virtual tour.&lt;/p&gt;
+&lt;p&gt;In addition to that, this time we arrived much better prepared, with multiple
+phones with &lt;a href="https://www.mapillary.com/"&gt;mapillary&lt;/a&gt;,
+&lt;a href="http://osmand.net/"&gt;osmand&lt;/a&gt; and
+&lt;a href="http://wiki.openstreetmap.org/wiki/OSMTracker_(Android)"&gt;OSMTracker&lt;/a&gt;, a
+&lt;a href="https://theta360.com/en/"&gt;360 cam&lt;/a&gt;, a
+&lt;a href="https://buy.garmin.com/en-US/US/p/140022"&gt;Garmin GPS&lt;/a&gt;, a drone and even
+&lt;a href="https://twitter.com/elotrojames"&gt;a notebook&lt;/a&gt; and two biologists.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://archive.org/download/maperespeis-poas/image20170226_104505408.jpg"&gt;&lt;img alt="The procession of the MapperSpace" src="https://archive.org/download/maperespeis-poas/image20170226_104505408.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Here's how it works. Everybody with the GPS in the phone activated waits until
+it finds the location. Then, each person uses the application of his preference
+to collect data: pictures, audio, video, text notes,
+&lt;a href="https://en.wikipedia.org/wiki/GPS_eXchange_Format"&gt;traces&lt;/a&gt;, annotations in the
+notebook...&lt;/p&gt;
+&lt;p&gt;Later, in our homes, we upload, publish and share all the collected data. These
+is useful to improve the free maps of
+&lt;a href="https://en.wikipedia.org/wiki/OpenStreetMap"&gt;OpenStreetMap&lt;/a&gt;. We add from
+really simple things like
+&lt;a href="https://archive.org/download/maperespeis-poas/20170226_105554.jpg"&gt;the location of a trash bin&lt;/a&gt;
+to really important things like how accessible is the place for a person in a
+wheelchair, together with the location of all the accesses or the places that
+have a lack of them. Each person improves the map a little, in the region that
+he knows or passed by. With more than 3 million users, OpenStreetMap is the
+best map of the world that exists; and it has a particular importance in
+regions like ours, without a lot of economic potential for the
+&lt;a href="https://en.wikipedia.org/wiki/Don't_be_evil#The_End_of_.22Don.27t_Be_Evil.22"&gt;megacorporations that make and sell closed maps stealing private data from their users&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Because the maps we make are free, what comes next has no limits. There are
+groups working on the reconstruction of 3D models from the pictures, on the
+identification and interpretation of signs, on applications to calculate the
+optimal route to reach any place using any combination of means of
+transportation, on applications to assist decission making during the design of
+the future of a city, and many other things. All of this based on shared
+knowledge and community.&lt;/p&gt;
+&lt;iframe width="800" height="600" src="https://embed-v1.mapillary.com/embed?version=1&amp;amp;filter=%5B%22all%22%5D&amp;amp;map_filter=%5B%22all%22%5D&amp;amp;image_key=dYPJnZINW7nHTEgJ7g9OEA&amp;amp;client_id=WHJxWW40RWhyVGR6ajVEci1saHZNUTozZDQ5NjRmM2I4ZjBiNjc2&amp;amp;style=classic" frameborder="0"&gt;&lt;/iframe&gt;
+
+&lt;p&gt;The image above is the virtual tour in
+Mapillary. As we recorded it with the 360 cam, you can click and drag with the
+mouse to see all the angles. You can also click above, in the play button to
+follow the path we took. Or you can click in any of the green dots in the map
+to follow your own path.&lt;/p&gt;
+&lt;p&gt;Thank you very much to everybody who joined us, specially to Denisse and
+Charles for being our guides, and for filling up the trip with interesting
+information about flora, fauna, geology and historic importance of El Poás.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://archive.org/download/maperespeis-poas/20170226_110006.jpg"&gt;&lt;img alt="Miembros del MaperEspeis" src="https://archive.org/download/maperespeis-poas/20170226_110006.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;(&lt;a href="https://archive.org/details/maperespeis-poas"&gt;More pictures and videos here&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;The next MapperSpace will be on march the 12th.&lt;/p&gt;&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/mapperspace-poas/</guid><pubDate>Wed, 01 Mar 2017 03:23:35 GMT</pubDate></item></channel></rss>

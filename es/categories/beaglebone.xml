@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../../assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Tangamandapio (Publicaciones sobre beaglebone)</title><link>http://elopio.net/</link><description></description><atom:link rel="self" type="application/rss+xml" href="http://elopio.net/es/categories/beaglebone.xml"></atom:link><language>es</language><lastBuildDate>Fri, 30 Jun 2017 10:45:53 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Sharing the Wi-Fi connection through Ethernet</title><link>http://elopio.net/es/blog/sharing-network/</link><dc:creator>Leo Arias</dc:creator><description>&lt;p&gt;My apartment was clearly not designed for the Internet of Things. I have a weird set up to connect all my devices: there’s ADSL, Ethernet, Wi-Fi, powerline networking, 4G from a free promotion until I download 3GB and then 3G for the rest of the month... It’s crazy, and getting crazier as I have to test more and more devices for &lt;a href="https://developer.ubuntu.com/en/snappy/start/"&gt;snappy&lt;/a&gt;. When I was about to throw a cable from the kitchen to the office I found about &lt;a href="http://askubuntu.com/a/174027/61416"&gt;sharing the network&lt;/a&gt; (thanks &lt;a href="https://askubuntu.com/users/7035/luis-alvarado"&gt;Luis&lt;/a&gt;!). Now let me repeat a slightly modified version of part of Luis’ answer to show how I share my wireless connection through an ethernet cable with my test board.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Open the network indicator.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Click &lt;em&gt;Edit Connections...&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared1.png"&gt; &lt;img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared1.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Network Connections&lt;/em&gt; dialog, click the &lt;em&gt;Add&lt;/em&gt; button.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared2.png"&gt; &lt;img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared2.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Choose a Connection Type&lt;/em&gt; dialog, select &lt;em&gt;Ethernet&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared3.png"&gt; &lt;img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared3.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Editing&lt;/em&gt; dialog, enter a name for the connection.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Go to the &lt;em&gt;IPv4 Settings&lt;/em&gt; tab.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Select the Method &lt;em&gt;Shared to other computers&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared4.png"&gt; &lt;img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared4.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Click the &lt;em&gt;Save&lt;/em&gt; button.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;What’s left is to connect an Ethernet cable from your laptop to the board, give power to the board and wait for it to finish booting.&lt;/p&gt;
+&lt;p&gt;To get the IP of the board you can run the &lt;code&gt;arp&lt;/code&gt; command (Thanks to Alex for the tip). It will show you the addresses of the neighbour machines. The one of your board will be like &lt;code&gt;10.42.0.?&lt;/code&gt;. Now you can ssh into the board using the default credentials (username &lt;code&gt;ubuntu&lt;/code&gt;, password &lt;code&gt;ubuntu&lt;/code&gt;) or the ones you configured.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/33/items/JaquerEspeis-bbb-snappy/image20160302_194108865.jpg"&gt; &lt;img src="https://ia601505.us.archive.org/33/items/JaquerEspeis-bbb-snappy/image20160302_194108865.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This also proved to be useful during our &lt;a href="https://archive.org/details/JaquerEspeis-bbb-snappy"&gt;first snappy maker night&lt;/a&gt;, when we had to connect many boards to play with the system.&lt;/p&gt;
+&lt;p&gt;Pro tip: If you are having problems connecting through &lt;code&gt;ssh&lt;/code&gt;, you can connect &lt;a href="http://elopio.net/blog/connecting-to-snappy-through-the-serial-console/"&gt;through the serial console&lt;/a&gt; to check for errors.&lt;/p&gt;
+&lt;div class="references"&gt;
+
+&lt;/div&gt;</description><guid>http://elopio.net/es/blog/sharing-network/</guid><pubDate>Wed, 16 Mar 2016 05:56:35 GMT</pubDate></item><item><title>Conectarse a Snappy a través de la consola serial</title><link>http://elopio.net/es/blog/conectarse-a-snappy-a-traves-de-la-consola-serial/</link><dc:creator>Leo Arias</dc:creator><description>&lt;p&gt;Estoy trabajando en &lt;a href="https://developer.ubuntu.com/en/snappy/"&gt;Snappy Ubuntu&lt;/a&gt; con un BeagleBone Black Rev C y un Raspberry Pi 2. Es posible conectarse a los dispositivos a través de la consola serial para monitorear errores durante el arranque y para controlar el sistema. Luego de mi primer cable quemado, decidí escribir las instrucciones para conectar los cables y así reducir la probabilidad de que mis dispositivos prendan fuego.&lt;/p&gt;
+&lt;p&gt;Lo primero, por supuesto, es &lt;a href="https://developer.ubuntu.com/en/snappy/start/"&gt;instalar snappy en la tarjeta SD&lt;/a&gt;. Luego, comprar uno de estos &lt;a href="http://www.adafruit.com/products/954"&gt;cables FTDI&lt;/a&gt; que convierten de USB a serial. Este cable se puede usar en ambos dispositivos porque tiene los conectores separados. El cable &lt;em&gt;negro&lt;/em&gt; es &lt;strong&gt;tierra&lt;/strong&gt; (GND), el cable &lt;em&gt;blanco&lt;/em&gt; es para &lt;strong&gt;recibir datos en el puerto USB&lt;/strong&gt;, el cable &lt;em&gt;verde&lt;/em&gt; es para &lt;strong&gt;transmitir datos desde el puerto USB&lt;/strong&gt; ye el cable &lt;em&gt;rojo&lt;/em&gt; es de &lt;strong&gt;corriente eléctrica de 5V&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id="beaglebone-black"&gt;BeagleBone Black&lt;/h1&gt;
+&lt;p&gt;El &lt;a href="https://www.adafruit.com/product/1876"&gt;BeagleBone Black Rev C&lt;/a&gt; tiene 6 pines. Hay un punto blanco al lado del primer pin. Conecte el cable negro GND al primer pin, el cable verde al cuarto pin y el cable blanco al quinto pin. En el BeagleBone&lt;strong&gt;NUNCA conecte el cable rojo&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601501.us.archive.org/11/items/snappy-bbb/1-board-serial-pins-compress.jpg"&gt; &lt;img src="https://ia601501.us.archive.org/11/items/snappy-bbb/1-board-serial-pins-compress.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601501.us.archive.org/11/items/snappy-bbb/2-1-serial_cables.jpg"&gt; &lt;img src="https://ia601501.us.archive.org/11/items/snappy-bbb/2-1-serial_cables.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;h1 id="raspberry-pi"&gt;Raspberry Pi&lt;/h1&gt;
+&lt;p&gt;El &lt;a href="https://www.adafruit.com/products/2358"&gt;Raspberry Pi 2 Model B&lt;/a&gt; tiene 40 pines. &lt;a href="http://www.pighixxx.com/test/2015/06/raspberry-pi-v2-mod-b-pinout/#prettyPhoto%5Bgallery1105%5D/0/"&gt;Aquí&lt;/a&gt; hay un bonito dibujo del pinout con los números y las funciones de los pines.&lt;/p&gt;
+&lt;p&gt;Conecte el cable negro GND al sexto pin, el cable blanco al octavo pin y el cable verde al décimo pin. De forma opcional puede darle corriente al Raspberry conectando el cable rojo al segundo pin, pero si hace esto NO conecte el cable de poder USB porque &lt;strong&gt;no es posible usar ambas fuentes de poder&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601502.us.archive.org/29/items/image20150609_054825862/6-pins-highlight.jpg"&gt; &lt;img src="https://ia601502.us.archive.org/29/items/image20150609_054825862/6-pins-highlight.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601502.us.archive.org/29/items/image20150609_054825862/7-serial.jpg"&gt; &lt;img src="https://ia601502.us.archive.org/29/items/image20150609_054825862/7-serial.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;h1 id="consola-serial"&gt;Consola serial&lt;/h1&gt;
+&lt;p&gt;Instale screen:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  sudo apt-get install screen&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Conecte el otro extremo del cable a un puerto USB de su computadora y busque el nombre del dispositivo tty:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  ls /dev/ttyUSB*&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Inicie la sesión de screen en la terminal serial, reemplazando &lt;code&gt;/dev/ttyUSB?&lt;/code&gt; con el número de su dispositivo.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  sudo screen {/dev/ttyUSB?} 115200&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Por último, inserte la tarjeta SD y conecte el cable de poder de su dispositivo. Ahora podrá ver los mensajes de arranque en la termina, y al final snappy le permitirá inciar la sesión. El usuario predeterminado es &lt;em&gt;ubuntu&lt;/em&gt; y la contraseña predeterminada también es &lt;em&gt;ubuntu&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601501.us.archive.org/11/items/snappy-bbb/6-booted.png"&gt; &lt;img src="https://ia601501.us.archive.org/11/items/snappy-bbb/6-booted.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Snappy tiene un servidor SSH preinstalado. Una vez que el arranque ha sido exitoso, se puede iniciar sesión a través de SSH, lo que nos da una mejor experiencia. Esta terminal serial se puede usar para obtener la dirección IP del dispositivo:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  ip addr show&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Y desde una terminal diferente, reemplazando &lt;code&gt;ip&lt;/code&gt; con la dirección IP del dispositivo:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  ssh ubuntu@{ip}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Ahora estamos listos para empezar a jugar con snappy en el dispositivo. No se pierdan del &lt;a href="https://developer.ubuntu.com/en/snappy/tutorials/using-snappy/"&gt;tour&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Para salir de la consola serial, presione &lt;code&gt;CTRL+a&lt;/code&gt; y luego &lt;code&gt;k&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="más-información-sobre-los-cables-y-la-consola-serial"&gt;Más información sobre los cables y la consola serial&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://elinux.org/Beagleboard:BeagleBone_Black_Serial"&gt;http://elinux.org/Beagleboard:BeagleBone_Black_Serial&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/connect-the-lead"&gt;https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/connect-the-lead&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://dave.cheney.net/2013/09/22/two-point-five-ways-to-access-the-serial-console-on-your-beaglebone-black"&gt;http://dave.cheney.net/2013/09/22/two-point-five-ways-to-access-the-serial-console-on-your-beaglebone-black&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="references"&gt;
+
+&lt;/div&gt;</description><category>beaglebone</category><category>free software</category><category>raspberrypi</category><category>snappy</category><category>ubuntu</category><guid>http://elopio.net/es/blog/conectarse-a-snappy-a-traves-de-la-consola-serial/</guid><pubDate>Fri, 03 Jul 2015 04:58:35 GMT</pubDate></item></channel></rss>

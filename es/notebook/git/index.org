@@ -1,0 +1,12 @@
+* add remote
+
+  git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git
+
+* Revert last commit
+
+  git reset HEAD~
+
+* Remove untracked files
+
+  git clean -ff -d -x -n
+  git clean -ff -d -x

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tangamandapio (publicaciones antiguas, página 2) | Tangamandapio</title>
+<link href="../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS (en)" href="../rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (eo)" href="../eo/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (es)" href="rss.xml">
+<link rel="canonical" href="http://elopio.net/es/index-2.html">
+<link rel="prev" href="." type="text/html">
+<link rel="next" href="index-1.html" type="text/html">
+<!--[if lt IE 9]><script src="../assets/js/html5.js"></script><![endif]-->
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Ir al contenido principal</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Mostrar navegación</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://elopio.net/es/">
+
+                <span id="blog-title">Tangamandapio</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="archive.html">Archivo</a>
+                </li>
+<li>
+<a href="categories/">Etiquetas</a>
+                </li>
+<li>
+<a href="rss.xml">Canal RSS</a>
+                </li>
+<li>
+<a href="../notebook">Notas</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+            </li>
+<li><a href="http://elopio.net/" rel="alternate" hreflang="en">English</a></li>
+            <li><a href="http://elopio.net/eo/" rel="alternate" hreflang="eo">Esperante</a></li>
+
+                
+                    
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+
+    
+
+
+    
+<div class="postindex">
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/setup-apt-cache/" class="u-url">Set up a cache for deb packages</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/setup-apt-cache/" rel="bookmark"><time class="published dt-published" datetime="2016-12-08T19:43:13-06:00" title="2016-12-08 19:43">2016-12-08 19:43</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <p>All Linux distributions are constantly updating the versions of the packages in their archives. That’s what makes them great, lots of people working in a distributed way to let you easily update your software and get the latest features or critical bug fixes.</p>
+<p>And you should constatly update your operating system. Otherwise you’ll become an easy target for criminals exploiting known vulnerabilities.</p>
+<p>The problem, at least for me, is that I have many many Ubuntu machines in the house and my badwidth is really bad. So keeping all my real machines, virtual machines and various devices up-to-date every day has become a slow problem.</p>
+<p>The solution is to cache the downloaded deb packages. So only one machine has to make the downloads from the internet, and they will be kept in my local network to make much faster to get the packages in the other machines.</p>
+<p>So let me introduce you to <a href="https://www.unix-ag.uni-kl.de/~bloch/acng/">Apt-Cacher NG</a>.</p>
+<p>Setting it up is simple. First, choose a machine to run the cacher and store the packages. Ideally, this machine should be running all the time, and should have a good amount of storage space. I’m using my desktop as the cacher; but as soon as I update my router to one that runs Ubuntu, I will make that one the cacher.</p>
+<p>On that machine, install apt-cacher-ng:</p>
+<pre><code>  sudo apt install apt-cacher-ng</code></pre>
+<p>And that’s it. The cacher is installed and configured. Now we need the name of this machine to use it on the other ones:</p>
+<pre><code>  $ hostname
+  calchas</code></pre>
+<p>In this example, <em>calchas</em> is the name of the machine I’m using as the cacher. Take note of the name of your machine, and now, in all the other machines:</p>
+<pre><code>  $ sudo gedit /etc/apt/apt.conf.d/02proxy</code></pre>
+<p>That will create a new empty configuration file for <em>apt</em>, and open it to be edited with <em>gedit</em>, the default graphical editor in Ubuntu. In the editor, write this:</p>
+<pre><code>  Acquire::http::proxy "http://calchas.lan:3142";</code></pre>
+<p>replacing <em>calchas</em> with the name of your cacher machine, collected above. The <em>.lan</em> part is really only needed when you are setting it up in a virtual machine and the host is the same as the cacher, but it doesn’t hurt to add it on real machines. That number, <em>3142</em>, is the network port where the caching service is running, leave it unchanged.</p>
+<p>After that, the first time you update a package in your network it will be slow just as before. But all the other machines updating the same package will be very fast. I have to thank <em>apt-cacher-ng</em> for saving me many hours during my updates of the past years.</p>
+<div class="references">
+
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/ubuntu-testing-day-wrap-up-20161202/" class="u-url">Ubuntu Testing Day wrap up - 20161202</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/ubuntu-testing-day-wrap-up-20161202/" rel="bookmark"><time class="published dt-published" datetime="2016-12-05T11:04:13-06:00" title="2016-12-05 11:04">2016-12-05 11:04</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>We have survived two testing days, and now we can safely say that it will become
+a Friday tradition :)</p>
+<p>Last Friday our nice guest was <a href="https://twitter.com/geekgonecrazy">Aaron Ogle</a>,
+from <a href="https://rocket.chat/">Rocket Chat</a>. He gave us a tour on the Rocket Chat
+UI and we discussed about how they packaged it as a snap.</p>
+<p>If you missed it, click the image below to watch it.</p>
+<p><a href="https://www.youtube.com/watch?v=9mHhoniKKBk"><img alt="Alt text" src="https://img.youtube.com/vi/9mHhoniKKBk/0.jpg"></a></p>
+<p>Building from what we saw on the first session, we tested the snap
+using a virtual machine again. But this time, we cloned it to keep a pristine
+machine and make following testing sessions faster. If you want to help the
+Ubuntu and Rocket Chat communities, this is an easy way to prepare your
+environment:</p>
+<ul>
+<li><a href="http://elopio.net/blog/install-ubuntu-in-vm/">Set up a virtual machine</a></li>
+<li><a href="https://www.ubuntu.com/download/desktop/install-ubuntu-desktop">Install Ubuntu</a></li>
+<li><a href="http://elopio.net/blog/pristine-vm/">Clone the pristine virtual machine</a></li>
+</ul>
+<p>Once you have your clone ready, install the most recent and bleeding edge
+version of rocket chat with:</p>
+<pre class="code literal-block"><span></span>$ sudo snap install rocketchat-server --edge
+</pre>
+
+
+<p>Then you can follow this
+<a href="https://gist.github.com/elopio/7e020a8353bb538c396749f2bda80fff">gist with the initial steps to start testing the Rocket Chat snap</a></p>
+<p>Also you can test a real installation of Rocket Chat, joining
+<a href="https://rocket.ubuntu.com/channel/community">our community channel</a>, where we
+are available all day, every day. If you have a question, just ask. I am elopio
+in there.</p>
+<p>During the session we took a look at the <a href="https://github.com">GitHub website</a>,
+where many free software communities do their development in the open. They have
+a great <a href="https://guides.github.com/activities/contributing-to-open-source/">guide to start contributing to open source projects</a>. Go on and
+spread your love for free software in the form of bug reports :)</p>
+<p>The gratitude this week goes to our newly acquired staff members
+<a href="https://twitter.com/la_juyis">Julia</a> and
+<a href="https://twitter.com/rainveil">Kyle</a>, and of course to Aaron for letting us
+have a funny Friday evening. Make sure to take a look at the cool
+things he and his teammates are doing; and if you have some free time and want
+to join an exciting, open and nice community, give them a hand. Also try the
+Jitsi integration for video conference, it's mind-blowing that there are no
+closed components anywhere.</p>
+<p>See you next Friday at <a href="https://ubuntuonair.com">Ubuntu On-Air</a>.</p>
+</div>
+    </div>
+    </article>
+</div>
+
+        <nav class="postindexpager"><ul class="pager">
+<li class="previous">
+                <a href="." rel="prev">Publicaciones posteriores</a>
+            </li>
+            <li class="next">
+                <a href="index-1.html" rel="next">Publicaciones anteriores</a>
+            </li>
+        </ul></nav>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a>Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a>
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../assets/js/all-nocdn.js"></script><script src="../assets/js/colorbox-i18n/jquery.colorbox-es.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("es");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>

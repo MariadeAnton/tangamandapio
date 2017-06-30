@@ -1,0 +1,23 @@
+* golang
+
+  [[https://www.acksin.com/strum/][Linux Diagnostic Tool]]
+
+* iot
+
+  [[http://www.eclipse.org/kura/][kura]]
+
+* docs
+
+  [[https://www.mapbox.com/blog/retext-mapbox-standard/][Regulating English with retext-mapbox-standard]]
+
+* torrent
+
+  [[https://github.com/GrappigPanda/notorious][notorious tracker]]
+
+  [[https://github.com/anacrolix/torrent][go torrent]]
+
+  https://github.com/shadow/shadow
+
+* cloud
+
+  [[https://github.com/kelseyhightower/kubernetes-the-hard-way][kubernetes the hard way]]

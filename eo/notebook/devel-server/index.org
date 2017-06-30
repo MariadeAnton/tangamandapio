@@ -1,0 +1,111 @@
+#+BEGIN_SRC sh
+  # create canonistack instance
+  source /path/to/novarc_lcy02
+  openstack server create --key-name elopio_lcy02 --flavor cpu10-ram10-disk100-ephemeral20 --image ubuntu-released/ubuntu-xenial-16.04-beta2-amd64-server-20160322-disk1.img remote-devel
+  # create user
+  ssh ubuntu@$ip -i /path/to/elopio_lcy02.key
+  sudo adduser elopio
+  sudo adduser elopio sudo
+  sudo su elopio
+  ssh-import-id elopio
+  exit
+  exit
+  ssh elopio@$ip
+  sudo deluser ubuntu
+  # basic setup
+  sudo apt-get update
+  sudo apt-get upgrade
+  sudo reboot
+  # locales
+  sudo apt-get install language-pack-en language-pack-eo language-pack-es
+  # mosh
+  sudo apt-get install mosh
+  exit
+  openstack security group create mosh
+  openstack security group rule create --proto udp --dst-port 60000:61000 --src-ip 0.0.0.0/0 mosh
+  openstack server add security group remote-devel mosh
+  mosh elopio@$ip
+  # utils
+  sudo apt-get install byobu
+  byobu
+
+  # irssi
+  sudo apt-get install irssi
+  # authentication
+  /msg nickserv identify $freenode_password
+  /hilight elopio
+  # autojoin
+  /server add -auto -network Freenode irc.freenode.net 6667
+  /network add -nick elopio Freenode
+  /channel add -auto #snappy Freenode
+  /server add -auto -ssl -network Canonical irc.canonical.com 6697 $canonical_irc_password
+  /channel add -auto #snappy-internal Canonical
+  # send pings to the phone
+  wget -P ~/.irssi/script/ https://scripts.irssi.org/scripts/my_beep.pl
+  wget -P ~/bin https://bazaar.launchpad.net/~chipaca/+junk/poke/download/head:/iconator-20150219111307-4oqsppf10nk3zhfu-13/poke
+  mkdir -p ~/.config/poke
+  echo "$poke_token" > ~/.config/poke/token
+  chmod -R 700 ~/.config/poke/
+  /script load my_beep.pl
+  /set beep_cmd python3 ~/bin/poke -t IRC
+  /set bell_beeps ON
+  /set beep_msg_level MSGS NOTICES DCC DCCMSGS HILIGHT
+
+  # mutt
+  sudo apt-get install mutt
+
+  # telegram
+  sudo apt-get install libreadline-dev libconfig-dev libssl-dev lua5.2 liblua5.2-dev libevent-dev libjansson-dev libpython-dev make
+  git clone --recursive https://github.com/vysheng/tg.git && cd tg
+  ./configure
+  make
+
+  # ssh keys
+  scp /home/elopio/.ssh/id_canonical_rsa elopio@$ip:/home/elopio/.ssh/id_rsa
+  scp /home/elopio/.ssh/id_canonical_rsa.pub elopio@10.55.32.142:/home/elopio/.ssh/id_rsa.pub
+
+  # git
+  sudo apt-get install git
+
+  # emacs
+  sudo apt-get install emacs24-nox python-jedi python-setuptools python-pip python-virtualenv
+  git clone git@github.com:fgimenez/.emacs.d.git
+
+  # workspace
+  mkdir -p ~/workspace/canonical
+
+  # snapcraft
+  cd ~/workspace/canonical
+  git clone git@github.com:elopio/snapcraft.git
+  cd ~/workspace/canonical/snapcraft
+  git remote add upstream git@github.com:ubuntu-core/snapcraft.git
+  git fetch upstream
+  sudo apt-get build-dep snapcraft
+  sudo apt-get install mercurial python3-coverage python3-flake8 python3-pexpect
+
+  # snappy
+  mkdir -p ~/workspace/go/src/github.com/ubuntu-core
+  cd ~/workspace/go/src/github.com/ubuntu-core
+  git clone git@github.com:elopio/snappy.git
+  cd ~/workspace/go/src/github.com/ubuntu-core/snappy
+  git remote add upstream git@github.com:ubuntu-core/snappy.git
+  git fetch upstream
+
+  export GOPATH=/home/elopio/workspace/go
+
+  # lxd
+  sudo apt install lxd
+  sudo apt install zfsutils-linux
+
+  # autopkgtests
+  sudo apt-get install autopkgtest qemu-system qemu-utils
+  adt-buildvm-ubuntu-cloud -v
+
+  # cloud
+  sudo apt install python3-openstackclient
+
+  # launchpad
+  sudo apt install bzr-builddeb
+  bzr launchpad-login elopio
+
+#+END_SRC

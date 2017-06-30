@@ -1,0 +1,30 @@
+* Go
+
+  [[https://www.youtube.com/watch?v%3DoorX84tBMqo&utm_source%3Dgolangweekly&utm_medium%3Demail][Program Analysis]]
+
+  [[https://medium.com/@francesc/twelve-go-best-practices-ceca444b3733][Twelve Go Best Practices]]
+
+  [[https://www.youtube.com/watch?v%3D-KDRdz4S81U&index%3D7&list%3DPLxFC1MYuNgJT_ynbXGuYAZbSnUnq-6VQA][Perform better - Using Golang benchmark and profiling in everyday coding to make you optimize your code.]]
+
+  [[https://www.youtube.com/watch?v%3DYZpUCEXqmT8&index%3D12&list%3DPLxFC1MYuNgJT_ynbXGuYAZbSnUnq-6VQA][Comparative Analysis of Automation Frameworks (Testing).]]
+
+
+* Debian
+
+  [[http://saimei.acc.umu.se/pub/debian-meetings/2015/debconf15/Your_systemd_tool_box_dissecting_and_debugging_boot_and_services.webm][systemd debugging]]
+
+  [[http://meetings-archive.debian.net/pub/debian-meetings/2015/debconf15/Preferred_Debian_Packaging.webm][Preferred Debian Packaging]]
+
+  [[http://meetings-archive.debian.net/pub/debian-meetings/2015/debconf15/Stretching_out_for_trustworthy_reproducible_builds_creating_bit_by_bit_identical_binaries.webm][Stretching out for trustworty reproducible builds]]
+
+* Linux.conf.au
+
+  [[http://mirror.linux.org.au/pub/linux.conf.au/2017/Maintainers_Dont_Scale.webm][Maintainers don't scale]]
+
+  [[http://mirror.linux.org.au/pub/linux.conf.au/2017/Preparing_For_The_Next_Generation_of_Contributors.webm][Preparing for the next generation of contributors]]
+
+  [[http://mirror.linux.org.au/pub/linux.conf.au/2017/QA_in_the_Open.webm][QA in the open]]
+
+* Random
+
+  [[https://www.youtube.com/watch?v%3Df84n5oFoZBc][Hammock Driven Development - Rich Hickey]]

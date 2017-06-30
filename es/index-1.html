@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tangamandapio (publicaciones antiguas, página 1) | Tangamandapio</title>
+<link href="../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS (en)" href="../rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (eo)" href="../eo/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (es)" href="rss.xml">
+<link rel="canonical" href="http://elopio.net/es/index-1.html">
+<link rel="prev" href="index-2.html" type="text/html">
+<!--[if lt IE 9]><script src="../assets/js/html5.js"></script><![endif]-->
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Ir al contenido principal</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Mostrar navegación</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://elopio.net/es/">
+
+                <span id="blog-title">Tangamandapio</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="archive.html">Archivo</a>
+                </li>
+<li>
+<a href="categories/">Etiquetas</a>
+                </li>
+<li>
+<a href="rss.xml">Canal RSS</a>
+                </li>
+<li>
+<a href="../notebook">Notas</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+            </li>
+<li><a href="http://elopio.net/" rel="alternate" hreflang="en">English</a></li>
+            <li><a href="http://elopio.net/eo/" rel="alternate" hreflang="eo">Esperante</a></li>
+
+                
+                    
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+
+    
+
+
+    
+<div class="postindex">
+    <article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/pristine-vm/" class="u-url">Clone virtual machines to keep a pristine image</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/pristine-vm/" rel="bookmark"><time class="published dt-published" datetime="2016-12-02T10:31:13-06:00" title="2016-12-02 10:31">2016-12-02 10:31</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <p>The basic idea of using virtual machines for testing is to always start from a clean state, as close as possible to what a user would get after freshly installing the system on their real machines.</p>
+<p>So, every time we need to test something, we could <a href="http://elopio.net/blog/install-ubuntu-in-vm/">create a new virtual machine and intall Ubuntu from scratch there</a>, but that would take a considerable amount of time.</p>
+<p>An alternative is to install a machine once, and keep it clean. Never test in that one, and instead clone it every time you need to test something. Use the clone to experiment, and delete it when you are done. Cloning the machine is a lot faster than reinstalling each time. The base machine, the one you clone everytime, is called a pristine machine. If you are careful with it, the only time you will need to reinstall is when you are testing the installer.</p>
+<p>Cloning the pristine machine using Virtual Machine Manager is really simple, it’s done in like two clicks.</p>
+<p>First, of course, you will need to <a href="http://elopio.net/blog/install-ubuntu-in-vm/">install your pristine machine</a>. I always put pristine in the name, to make it less likely that I will start using it for testing. Every time I forget and play with the pristine machine, I’m polluting its state, and have to recreate it.</p>
+<p>With the pristine machine ready, I then recommend to open it and run in a terminal:</p>
+<pre><code>  sudo apt update &amp;&amp; sudo apt upgrade</code></pre>
+<p>That will update all the packages installed, so your clone starts also in the most up-to-date state. If you do this step every time, you will never have to wait for long while your machine downloads and installs lots of packages, just wait a little every day.</p>
+<p><a href="https://archive.org/download/elopio-screenshots2/clone/1-update.png"> <img src="https://archive.org/download/elopio-screenshots2/clone/1-update.png" alt="image"></a></p>
+<p>Now shut down the pristine machine and don’t touch it again, only to update it.</p>
+<p>To clone it, right click on it and then click the <em>Clone...</em> button.</p>
+<p><a href="https://archive.org/download/elopio-screenshots2/clone/2-clone.png"> <img src="https://archive.org/download/elopio-screenshots2/clone/2-clone.png" alt="image"></a></p>
+<p>A dialog will be opened, where you can enter the new virtual machine details.</p>
+<p><a href="https://archive.org/download/elopio-screenshots2/clone/3-cloneinfo.png"> <img src="https://archive.org/download/elopio-screenshots2/clone/3-cloneinfo.png" alt="image"></a></p>
+<p>I always write the date as part of the name, to remember when I created it. But the most important thing to do here is to make sure that the <em>Storage</em> option is set to <em>Clone this disk</em>. Otherwise, you will be sharing the disk with the pristine machine, which will pollute its state, the exact thing we are trying to avoid.</p>
+<p>This will take some time while the whole disk is copied. But not long, and once it’s done you can freely play and pollute this clone, without affecting the pristine machine.</p>
+<div class="references">
+
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/ubuntu-testing-day-wrap-up-20161125/" class="u-url">Ubuntu Testing Day wrap up - 20161125</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/ubuntu-testing-day-wrap-up-20161125/" rel="bookmark"><time class="published dt-published" datetime="2016-11-25T14:47:13-06:00" title="2016-11-25 14:47">2016-11-25 14:47</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Today we had our first testing day. We will keep doing this every Friday, and
+at the end of the session I will post a summary with links to follow up and
+learn more about the subject in case somebody is interested.</p>
+<p>You can watch the video by clicking the image below.</p>
+<p><a href="https://www.youtube.com/watch?v=bpi3DgON-pI"><img alt="Alt text" src="https://img.youtube.com/vi/bpi3DgON-pI/0.jpg"></a></p>
+<p>For this session we had Kyle Fazzari talking about his work as the maintainer
+of the Nextcloud snap.</p>
+<p>You can find more info about the project in the
+<a href="https://nextcloud.com/">Nextcloud main page</a> and more info about the snap
+in <a href="https://kyrofa.com/">Kyle's blog</a>.</p>
+<p>We tested the snap using a virtual machine. To set one up you can use the
+following guides:</p>
+<ul>
+<li><a href="http://elopio.net/blog/download-ubuntu/">Download the latest Ubuntu LTS</a></li>
+<li><a href="http://elopio.net/blog/install-ubuntu-in-vm/">Set up a virtual machine</a></li>
+<li><a href="https://www.ubuntu.com/download/desktop/install-ubuntu-desktop">Install Ubuntu</a></li>
+</ul>
+<p>After the virtual machine is ready, Nextcloud can be installed in there by just
+running in the terminal:</p>
+<pre class="code literal-block"><span></span>$ sudo snap install nextcloud
+</pre>
+
+
+<p>If you want to test an unreleased and unstable version to help the Nextcloud
+developers, you can add the flag --edge or --beta to that command.</p>
+<p>I wrote some steps to guide you getting started with the testing in this
+<a href="https://gist.github.com/elopio/735d995920ef5fb9d24eb6931f6686c0">gist</a>.</p>
+<p>And finally, if you want to join our community, we are usually in
+<a href="https://rocket.ubuntu.com/">Rocket Chat</a>.
+You can join the #community, #qa or #snapcraft channels, or any other that
+catches your attention.</p>
+<p>Special thanks to <a href="https://twitter.com/la_juyis">Julia</a> and CoderEurope for joining us during the session. And of course to Kyle and the Nextcloud
+community for this amazing piece of free software that encourages everybody to
+take control over their data, in a really simple way.</p>
+<p>You are all invited to join us the next time, which will be Friday, December
+2nd, again at <a href="https://ubuntuonair.com">Ubuntu On-Air</a>. The time and theme will be announced
+soon. Or at least before it starts.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/install-ubuntu-in-vm/" class="u-url">Install Ubuntu in a virtual machine</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/install-ubuntu-in-vm/" rel="bookmark"><time class="published dt-published" datetime="2016-11-24T23:13:13-06:00" title="2016-11-24 23:13">2016-11-24 23:13</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <p>There are multiple ways to test Ubuntu. The most simple, and most dangerous is to just use your real Ubuntu machine to install and try things. I wouldn’t recommend this one to begin with, because we will be using experimental software that it’s likely to completely break your operating system every now and then.</p>
+<p>This is not so terrible. Unless you are dealing with low-level stuff, the worst case scenario will be solved by reinstalling Ubuntu. And usually it won’t even come to that. My machines always have the unreleased unstable version of Ubuntu, and I’m often learning interesting things by trying to recover the mess I make. But let’s not get to that yet, let’s first see other options.</p>
+<p>My preferred way to test graphical applications is to use <a href="https://en.wikipedia.org/wiki/Kernel-based_Virtual_Machine">Kernel-based Virtual Machine</a> (KVM) and <a href="https://en.wikipedia.org/wiki/Virtual_Machine_Manager">Virtual Machine Manager</a> hosted on my real machine. A virtual machine emulates a real machine. It is completely isolated from the host where it runs, so you can freely experiment in it without the risk of breaking a machine that you will later need for something else. If things go crazy, just throw away the virtual machine and start again. The downside is that it’s slower than testing in some of the alternatives, like LXC or Docker. But I like it because it gives me an environment that’s really close to what a user would get when he installs Ubuntu on his machine. Also it’s really simple with the Virtual Machine Manager.</p>
+<p>For this I’m going to assume that you have a machine with Ubuntu already. If you don’t have one, you can follow this <a href="https://www.ubuntu.com/download/desktop/install-ubuntu-desktop">guide to install Ubuntu</a> by yourself, or you can contact somebody from your Local Community Team using the <a href="http://loco.ubuntu.com/">LoCo Portal</a>. There’s always somebody who would like to meet and help a new Ubuntero or Ubuntera to get started. And in case of doubt, just ask your question in <a href="https://askubuntu.com/">Ask Ubuntu</a> and you will get quick help there too.</p>
+<p>To install everything, let’s open a terminal, like Mr. Robot. Click the Ubuntu icon on the top-left of the screen, type <code>terminal</code> and click on the first result.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/1-terminal.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/1-terminal.png" alt="image"></a></p>
+<p>Many of the things we do with commands in the terminal can also be done using graphical applications. The terminal might seem overcomplicated at first, but soon you will notice that it’s easier to get lost trying to click buttons. In here we will do both; for some things I like commands, for some I like buttons. However, the first rule is to never enter a command that you don’t understand; and you should be specially suspicious if the command asks for your password. If you don’t understand what you are doing, <a href="https://lmgtfy.com/?q=sudo">search</a> and <a href="https://askubuntu.com/questions/112069/nothing-shows-up-in-the-terminal-when-i-type-my-password">ask</a>.</p>
+<p>Now, on the terminal, type:</p>
+<pre><code>  sudo apt install qemu-kvm libvirt-bin bridge-utils virt-manager</code></pre>
+<p>And press enter.</p>
+<p><em>sudo</em> is the command to execute other commands as a super user. You will need super user permissions to do administrative actions on the machine, like installing new software. <em>apt</em> is used to manage packages. So in here we are telling the machine to install 4 packages using apt as an administrator. The 4 packages are the software we will use to create and manage virtual machines.</p>
+<p>The first thing that <em>sudo</em> will do is to ask for your password.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/2-password.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/2-password.png" alt="image"></a></p>
+<p>Again, make sure that you are only following command line instructions from a trusted source, like me <code>^_^</code> And make sure that you know what you are doing before pressing enter.</p>
+<p>Type your user password in the terminal and press enter. The password will be hidden so nobody else can see it while you are typing it, but don’t worry, after pressing enter the command will proceed with the installation.</p>
+<p>You will know that it finished because you will be presented with a <a href="https://en.wikipedia.org/wiki/Command-line_interface#Command_prompt">prompt</a> again, something like <code>user@machine:~$</code> which indicates that the terminal is ready to receive a new command.</p>
+<p>Now let’s jump back to the graphical user interface. Click again the top-left Ubuntu icon, type <code>virtual machine manager</code> and click the first result.</p>
+<p>The Virtual Machine Manager window will be opened. So let’s create a new machine clicking the top-left shiny icon.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/4-newmachine.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/4-newmachine.png" alt="image"></a></p>
+<p>This will open a dialog to choose the installation method. We will install Ubuntu from an <a href="https://en.wikipedia.org/wiki/ISO_image">ISO image file</a>. If you don’t have one, you can follow the previous <a href="http://elopio.net/blog/download-ubuntu/">guide to download the latest Ubuntu version with Long Term Support</a>. Once you get it, select the <em>Local install media</em> option and click the <em>Forward</em> button.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/5-local-iso.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/5-local-iso.png" alt="image"></a></p>
+<p>In the next dialog page, click the <em>Browse</em> button, which will open a new dialog. In the new one, click <em>Browse Local</em>, which will open yet another dialog where you should select the downloaded Ubuntu ISO file (and now you see why I said that the command line was often easier :) Back at the first dialog, clilck the <em>Forward</em> button.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/8-iso-selected.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/8-iso-selected.png" alt="image"></a></p>
+<p>Next step is to select the amount of resources that you want to give to this virtual machine. If you give it a lot of resources, it will be faster, but then your real machine will be slower. So you have to balance both, another downside of using full virtual machines instead of ligher ways to simulate a machine. For your first machine, maybe just leave the default values. Pay attention at how the virtual and real machine feel, and next time choose a different value to compare.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/9-resources.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/9-resources.png" alt="image"></a></p>
+<p>So, <em>Forward</em> one more time and now we can choose the size of the disk of the virtual machine. I have found that 20GiB is generally enough, and you will throw away your machine long before you fill the space. Less than that and you will likely get the disk full and will have to resize it, which is kind of boring. I will paste the command for that some other day. <em>Forward</em>!</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/10-disk.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/10-disk.png" alt="image"></a></p>
+<p>And this is the last step, at least for this post. Enter a name for the virtual machine and click <em>Finish</em>.</p>
+<p>Here the interesting part begins, finally. You will see the virtual machine booting, just like a real one does. It will start the live Ubuntu system, which runs from volatile memory, so you have to install it in the hard disk of the virtual machine to make it permanent. And then again, as it emulates a real machine, the steps to install Ubuntu in a virtual machine are the same to install it in a real one, so the same <em>https://www.ubuntu.com/download/desktop/install-ubuntu-desktop</em> <span>guide to install a desktop machine</span> that I linked earlier will be useful.</p>
+<p>Once the virtual machine reboots, take some time to play with the user interface of Virtual Machine Manager. You will find controls to start, shutdown and reset the machine, and some more advanced options to change the hardware it is emulating. Remember that you can’t break your real machine, so play, make a mess, and start again.</p>
+<p>If you want to learn some more about Ubuntu, and collaborate with the community, join us in the Ubuntu Testing Days, every Friday in <a href="http://ubuntuonair.com/">Ubuntu On Air</a>. We will use virtual machines and other tools to test cool free software projects.</p>
+<div class="references">
+
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/download-ubuntu/" class="u-url">Download the latest Ubuntu LTS</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/download-ubuntu/" rel="bookmark"><time class="published dt-published" datetime="2016-11-24T20:36:35-06:00" title="2016-11-24 20:36">2016-11-24 20:36</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <p>The <a href="https://wiki.ubuntu.com/LTS">Ubuntu Long Term Support</a> (LTS) version is released every two years, on April; and it is supported for five years. So this version has to be super stable, it’s what most of our users have installed in their machines, and it often gets security fixes and some other <a href="https://wiki.ubuntu.com/StableReleaseUpdates">stable release updates</a>.</p>
+<p>All of this means that it always needs to be tested, and by as many hands and on as many different machines as possible. If you want to start helping the Ubuntu community, I would suggest that testing the latest LTS is the place to start. There will be so many people around the world that will be positively affected by this work, and all of them will sincerely appreciate it. Well... not all of them, but most of them for sure :) I for one will invite you to a beer when you come for holidays to Costa Rica.</p>
+<p>While testing Ubuntu you will learn about the many different aspects that build a free operating system. Then you can jump to collaborate in other areas that pique your interest, like support, programming, translations, packaging, planning, partying, etc. Or you can stay helping with the tests, maybe in some more unstable and rapidly changing projects.</p>
+<p>This is the first post of a series I will write about contributing to different areas of Ubuntu. They will focus mostly on testing because that’s what I enjoy the most. And in addition, we will meet live every Friday on <a href="http://ubuntuonair.com/">Ubuntu On-Air</a> to explore cool free software projects and help the developers on their way to a stable release.</p>
+<p>Let’s begin. The first thing you will have to do if you want to join our community is to download Ubuntu. To do that open your browser and go to https://www.ubuntu.com/download</p>
+<p>Click the <em>Ubuntu Desktop</em> link, or the download button next to it.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/download-ubuntu/1-download-page.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/download-ubuntu/1-download-page.png" alt="image"></a></p>
+<p>There are other different versions of Ubuntu. Newer and older releases, different user interface flavors, smaller versions for servers and connected devices, and some for specific phones and tablets. We will see some of them in following posts and meetings, but for now we will start with the basic and most common.</p>
+<p>The next step shows you the recommended requirements that a machine should meet to run this Ubuntu version properly. Make sure that you have all of them and click the <em>Download</em> button.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/download-ubuntu/2-requirements.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/download-ubuntu/2-requirements.png" alt="image"></a></p>
+<p>This opens a page for optional donations. If you feel generous, you can give some money to the community and decide where it should be spent. If you can’t or don’t want to give any money, no problem, just click the link that says: <em>Not now, take me to the download</em>. Beers, hugs, bugs are all valid payment methods too.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/download-ubuntu/3-donations.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/download-ubuntu/3-donations.png" alt="image"></a></p>
+<p>And that’s it. A dialog should appear offering you to download the file. Make sure to choose the option to save it into your disk, and take into account that if you use a different browser than mine, your dialog might look different.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/download-ubuntu/4-save-file.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/download-ubuntu/4-save-file.png" alt="image"></a></p>
+<p>This was a first simple step. If it was too simple for you, don’t worry, next time we will do a few more complicated things. If on the other hand you got lost somewhere, also don’t worry because we will be around to answer any kind of doubts.</p>
+<p>In both cases, come and join us next Friday, November 25th at 18:00 UTC on our first Ubuntu Testing Day! We will use this image to test the awesome <a href="https://nextcloud.com/">Nextcloud</a> snap. <a href="https://kyrofa.com/">Kyle Fazarri</a> has been making some great work to package Nextcloud for everybody, and he will be joining us to show off and answer questions.</p>
+<div class="references">
+
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/first-snaps/" class="u-url">On writing my first snaps, and keeping my passwords secure everywhere</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/first-snaps/" rel="bookmark"><time class="published dt-published" datetime="2016-07-01T09:00:00-06:00" title="2016-07-01 09:00">2016-07-01 09:00</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <p>I’ve been writing snaps for a year, more or less. But all the snaps I had written were a one-time thing to reproduce a bug, automate a scenario, or explore a specific code path. A few months ago I decided to write one snap that I would use day-to-day. The application I use the most by far is keepass, so that seemed like a good place to start.</p>
+<h1 id="kpcli">kpcli</h1>
+<p>With <a href="https://github.com/alecsammon/kpcli">kpcli</a> I access my password database from the command line. It’s just one big perl script, but not as ugly as it sounds :) That was a great first experiment because I haven’t tried perl in a snap before, and it would let me access the passwords from my beagle bone black in a secure and confined way.</p>
+<p>Because it is a script, I just need to copy it into the snap. Of course, there’s a plugin for that! <a href="http://snapcraft.io/">snapcraft</a> is a meta-packaging tool to generate snaps. It comes with plugins for many packaging tools, <em>copy</em> being the most simple of them. Run:</p>
+<pre><code>  $ sudo apt install snapcraft
+  $ snapcraft help copy</code></pre>
+<p>The next step is to look at the dependencies. Luckily, they are right there in the <a href="https://github.com/alecsammon/kpcli/blob/master/README.md">README</a> file, in the form of Ubuntu packages. snapcraft calls them <em>stage-packages</em>, and they will be installed into the snap during the build.</p>
+<p>Now I have almost all the difficult details to make the snap, and it was surprisingly easy. With this information, I wrote a part (<a href="http://snapcraft.io/create/#parts-intro">read more about parts</a>):</p>
+<pre><code>  kpcli:
+    source: https://github.com/alecsammon/kpcli.git
+    plugin: copy
+    files:
+      kpcli.pl: scripts/kpcli.pl
+    stage-packages:
+      - perl-base
+      - libcrypt-rijndael-perl
+      - libterm-readkey-perl
+      - libsort-naturally-perl
+      - libfile-keepass-perl
+      - libterm-shellui-perl
+      - libterm-readline-gnu-perl
+      - libclone-perl</code></pre>
+<p>I am just missing a way to tell the command where to find the perl libraries that I am bundling inside the snap. There is <a href="https://bugs.launchpad.net/snapcraft/+bug/1583259">work in progress</a> to make it easier to set up environment variables before launching the command; but for my first simple snap, quick and easy will do. I wrote a wrapper script:</p>
+<pre><code>  #!/bin/sh
+
+  $SNAP/usr/bin/perl -I $SNAP/usr/share/perl/5.22 -I $SNAP/usr/lib/x86_64-linux-gnu/perl/5.22 -I $SNAP/usr/lib/x86_64-linux-gnu/perl5/5.22 -I $SNAP/usr/share/perl5 $SNAP/scripts/kpcli.pl</code></pre>
+<p>and the corresponding part:</p>
+<pre><code>  launcher:
+    plugin: copy
+    files:
+      run.sh: scripts/run.sh</code></pre>
+<p>Finally, I added details about the <em>name</em>, <em>version</em>, <em>summary</em> and <em>description</em> of the snap, and defined the kpcli <em>app</em>. You can <a href="https://github.com/ubuntu/snappy-playpen/blob/master/kpcli/snapcraft.yaml">download the source of this snapcraft.yaml</a>, put it in a directory and run <strong>snapcraft</strong> in there to generate it yourself. Or try mine installing it from the store:</p>
+<pre><code>  $ sudo snap install kpcli-elopio
+  $ kpcli-elopio.kpcli</code></pre>
+<h1 id="keepassx">KeepassX</h1>
+<p>Ok, that solves command line access, but I also want some eye-candy, sometimes. <a href="https://github.com/keepassx/keepassx.git">KeepassX</a> gives me access to the same passwords database through a GUI. By the time I finished my CLI snap I saw work from <a href="https://kyrofa.com/">kyrofa</a>, <a href="http://blog.sergiusens.org">sergiusens</a> and <a href="http://davidplanella.org/">dpm</a> to make it easy to snap desktop apps and use them in Ubuntu classic. I also was at a sprint sitting next to <a href="https://launchpad.net/~attente">attente</a>, who knows everything I didn’t know about the desktop, so it was a great time to enter the world of collaborative snapping.</p>
+<p>Let me digress here for a moment to talk about collaboration. <strong>snapcraft</strong> and <strong>snapd</strong> are free software, and a lot of their design is based on the idea that the system can be extended and improved through the shared work of many and diverse developers. <strong>snapcraft</strong> aims to be the universal packaging tool, and <strong>plugins</strong> are the way we integrate the wild variety of build systems into the lifecycle to generate a snap. KeepassX is more complex than the CLI client, and it uses <em>cmake</em> to generate the executable. Well, guess what? There’s a plugin for that! :) (<a href="https://github.com/snapcore/snapcraft/blob/master/snapcraft/plugins/cmake.py">see the source of the cmake plugin</a>). Also, this application uses the QT5 UI libraries. Just like with the kpcli snap, that means I will require to set up some environment variables and a launcher; but somebody else already did that and we have a way to share and reuse <strong>parts</strong>. Run:</p>
+<pre><code>  $ snapcraft update
+  $ snapcraft search qt5
+  $ snapcraft define qt5conf</code></pre>
+<p>There’s a part for that!! And when this application is running, I would like it to be integrated with <em>unity7</em>, if available. That means I would need a few extra permissions for my isolated app to access the unity7 services and libraries installed in a classic Ubuntu system. I’m a lucky guy because there’s an interface for that!!! (<a href="https://github.com/snapcore/snapd/blob/master/interfaces/builtin/unity7.go">see the source of the unity7 interface</a>) By default, snaps will be fully confined and won’t be able to access anything they don’t provide by themselves. Through <strong>interfaces</strong>, we allow snaps to get extra permissions to consume services, access devices and directories, and do anything that you could do in a classic unconfined Linux system; but now in a controlled manner with the explicit acknowledgement of the user for sensitive stuff. Run:</p>
+<pre><code>  $ snap interfaces</code></pre>
+<p>We have plugins, parts and interfaces for the most common cases of the most common apps. But the fun is just starting, and there are lots and lots of apps out there that would benefit from the controlled dependencies, usable security and transactional updates of snaps. We celebrate when we get new people into the team, so if you want to participate and influence the future of this shiny project, we can help you getting started <a href="https://developer.ubuntu.com/en/blog/2016/06/08/snappy-playpen-kickoff-highlights/">in the playpen</a>.</p>
+<p>One last detail about collaboration is the relation with upstreams and distribution maintainers. Snapping free software projects is a pleasure because the source is available for us to inspect and decide on the best strategy to build the snap. Then we spread the apps to more people, we get more feedback and in many cases we end up sending patches to improve the upstream project. And I already mentioned the use of Ubuntu packages during the build of the snaps. With this we bootstrap from the awesome work that the <strong>Debian</strong> and <strong>Ubuntu</strong> communities are doing, and we’ll keep benefitting from both sides as we need debs to build some snaps, and the two play nicely together.</p>
+<p>Aaaand back on track, because with all the work shared by the community this KeepassX snap is almost done by itself, but not quite.</p>
+<p>I start by creating a new <em>snapcraft.yaml</em> file an defining the snap details:</p>
+<pre><code>  name: keepassx-elopio
+  version: "2.0.2"
+  summary: KeePassX is a cross platform password safe
+  description: |
+    KeePassX is an application for people with extremly high demands on secure
+    personal data management. It has a light interface, is cross platform and
+    published under the terms of the GNU General Public License.</code></pre>
+<p>Next, the app:</p>
+<pre><code>  apps:
+    keepassx:
+      command: qt5-launch keepassx
+      plugs: [unity7, opengl]</code></pre>
+<p>Take a look at that qt5-launch, which is provided from the shared qt <strong>part</strong> that I will reference in a few lines. <em>keepassx</em> is a binary that lives inside the snap, and that we will compile using a <em>snapcraft</em> <strong>plugin</strong>. Also look at those plugs. That’s how we tell the system that a snap wants to consume an <strong>interface</strong> slot of the same name.</p>
+<p>Followed by the parts:</p>
+<pre><code>  parts:
+    keepassx:
+      source: https://github.com/keepassx/keepassx.git
+      source-tag: 2.0.2
+      plugin: cmake
+      build-packages:
+        - g++
+        - qtbase5-dev
+        - libqt4-dev
+        - libqt5x11extras5-dev
+        - qttools5-dev
+        - qttools5-dev-tools
+        - libgcrypt20-dev
+        - zlib1g-dev
+      stage-packages:
+        - libgtk2.0-0
+        - libqt5gui5
+        - unity-gtk2-module
+        - appmenu-qt5
+        - dconf-gsettings-backend
+      after: [qt5conf]</code></pre>
+<p>Note the new <em>build-packages</em> section. Those packages will not end up in the snap, they are only used during the compilation so they will be installed in the host where you are running <em>snapcraft</em>. I already discussed about the <em>stage-packages</em>, nothing new to see there. Now the <em>after</em> keyword is where a lot of the collaboration magic happens. It means that my <em>keepassx</em> part depends on the <em>qt5conf</em> part. But I don’t define the <em>qt5conf</em> part in my yaml file, so snapcraft will bring it from the pool of shared parts (<a href="https://github.com/dplanella/qt5conf">see the source of the qt5conf part</a>). I love this because I didn’t have to write any of the qt complications, and when a qt expert makes a change to improve it, I just need to run snapcraft again and my snap will be better with no effort. This is where the <em>qt5-launch</em> I used in the apps section comes from.</p>
+<p>I finish my yaml adding a last part:</p>
+<pre><code>  ...
+  parts:
+    keepassx:
+      ...
+    glibcompiledassets:
+      plugin: copy
+      files:
+        gschemas.compiled: usr/share/glib-2.0/schemas/gschemas.compiled
+        giomodule.cache: usr/lib/x86_64-linux-gnu/gio/modules/giomodule.cache</code></pre>
+<p>This is required to save the KeepassX settings. It’s currently not a nice way to include the compiled files in the snap, and we are discussing about how to improve it, so I won’t dig too much here. It shows how simple yet flexible snaps are: you can put anything into the snap, it doesn’t matter how you got it. But it also shows that we have things to improve, so let me insist on my invitation for you to join our project. If there’s something you hate, this is the right time to change it. If there’s something you like, there’s always room to improve it. <a href="http://media-cache-ak0.pinimg.com/736x/d7/cf/6e/d7cf6e3ec423dd7a02cc70a0aba8d99d.jpg">We have cookies</a>.</p>
+<p>Punto final, café con tamal. Give it a try:</p>
+<pre><code>  $ sudo snap install keepassx-elopio
+  $ keepassx-elopio.keepassx</code></pre>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/EkrankopioDe2016-07-0111-48-23.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/EkrankopioDe2016-07-0111-48-23.png" alt="image"></a></p>
+<div class="references">
+
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/convert-cbr-to-pdf/" class="u-url">Convert cbr files to pdf</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/convert-cbr-to-pdf/" rel="bookmark"><time class="published dt-published" datetime="2016-03-16T12:41:35-06:00" title="2016-03-16 12:41">2016-03-16 12:41</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <p>Here’s a quick tip. Generally when some of my good internet pirate friends share with me a comic book,<a href="blog/convert-cbr-to-pdf/#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> it comes in the <code>cbr</code> format. There is no application for my <a href="https://insights.ubuntu.com/2015/06/24/meizu-launches-the-mx4-ubuntu-edition-in-europe/">Ubuntu phone</a> to read these files (yet), but there are some good <code>pdf</code> readers. All I have to do is convert the files with some handy terminal commands.</p>
+<p>A <code>cbr</code> file is just a group of image files compressed in the <code>rar</code> format. So, let’s uncompress the files in a temporary directory:</p>
+<pre><code>  dir=$(mktemp -d)
+  cd $dir
+  unrar x /path/to/file.cbr</code></pre>
+<p>And then let’s convert them to pdf:</p>
+<pre><code>  convert * /path/to/file.pdf</code></pre>
+<p>Open the <code>pdf</code> to check it is OK:</p>
+<pre><code>  evince /path/to/file.pdf</code></pre>
+<p>And delete the temporary directory:</p>
+<pre><code>  cd ..
+  rm -rf $dir</code></pre>
+<p>Transfer to the phone, and enjoy.</p>
+<div class="references">
+
+</div>
+<div class="footnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Remember, <a href="http://kswp.org/wp/wp-content/uploads/2013/02/sharing-is-caring.jpg">sharing is caring</a><a href="blog/convert-cbr-to-pdf/#fnref1">↩</a></p></li>
+</ol>
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/sharing-network/" class="u-url">Sharing the Wi-Fi connection through Ethernet</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/sharing-network/" rel="bookmark"><time class="published dt-published" datetime="2016-03-15T23:56:35-06:00" title="2016-03-15 23:56">2016-03-15 23:56</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <p>My apartment was clearly not designed for the Internet of Things. I have a weird set up to connect all my devices: there’s ADSL, Ethernet, Wi-Fi, powerline networking, 4G from a free promotion until I download 3GB and then 3G for the rest of the month... It’s crazy, and getting crazier as I have to test more and more devices for <a href="https://developer.ubuntu.com/en/snappy/start/">snappy</a>. When I was about to throw a cable from the kitchen to the office I found about <a href="http://askubuntu.com/a/174027/61416">sharing the network</a> (thanks <a href="https://askubuntu.com/users/7035/luis-alvarado">Luis</a>!). Now let me repeat a slightly modified version of part of Luis’ answer to show how I share my wireless connection through an ethernet cable with my test board.</p>
+<ol>
+<li><p>Open the network indicator.</p></li>
+<li>
+<p>Click <em>Edit Connections...</em>.</p>
+<p><a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared1.png"> <img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared1.png" alt="image"></a></p>
+</li>
+<li>
+<p>On the <em>Network Connections</em> dialog, click the <em>Add</em> button.</p>
+<p><a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared2.png"> <img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared2.png" alt="image"></a></p>
+</li>
+<li>
+<p>On the <em>Choose a Connection Type</em> dialog, select <em>Ethernet</em>.</p>
+<p><a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared3.png"> <img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared3.png" alt="image"></a></p>
+</li>
+<li><p>On the <em>Editing</em> dialog, enter a name for the connection.</p></li>
+<li><p>Go to the <em>IPv4 Settings</em> tab.</p></li>
+<li>
+<p>Select the Method <em>Shared to other computers</em>.</p>
+<p><a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared4.png"> <img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared4.png" alt="image"></a></p>
+</li>
+<li><p>Click the <em>Save</em> button.</p></li>
+</ol>
+<p>What’s left is to connect an Ethernet cable from your laptop to the board, give power to the board and wait for it to finish booting.</p>
+<p>To get the IP of the board you can run the <code>arp</code> command (Thanks to Alex for the tip). It will show you the addresses of the neighbour machines. The one of your board will be like <code>10.42.0.?</code>. Now you can ssh into the board using the default credentials (username <code>ubuntu</code>, password <code>ubuntu</code>) or the ones you configured.</p>
+<p><a href="https://ia601505.us.archive.org/33/items/JaquerEspeis-bbb-snappy/image20160302_194108865.jpg"> <img src="https://ia601505.us.archive.org/33/items/JaquerEspeis-bbb-snappy/image20160302_194108865.jpg" alt="image"></a></p>
+<p>This also proved to be useful during our <a href="https://archive.org/details/JaquerEspeis-bbb-snappy">first snappy maker night</a>, when we had to connect many boards to play with the system.</p>
+<p>Pro tip: If you are having problems connecting through <code>ssh</code>, you can connect <a href="http://elopio.net/blog/connecting-to-snappy-through-the-serial-console/">through the serial console</a> to check for errors.</p>
+<div class="references">
+
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/conectarse-a-snappy-a-traves-de-la-consola-serial/" class="u-url">Conectarse a Snappy a través de la consola serial</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/conectarse-a-snappy-a-traves-de-la-consola-serial/" rel="bookmark"><time class="published dt-published" datetime="2015-07-02T22:58:35-06:00" title="2015-07-02 22:58">2015-07-02 22:58</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <p>Estoy trabajando en <a href="https://developer.ubuntu.com/en/snappy/">Snappy Ubuntu</a> con un BeagleBone Black Rev C y un Raspberry Pi 2. Es posible conectarse a los dispositivos a través de la consola serial para monitorear errores durante el arranque y para controlar el sistema. Luego de mi primer cable quemado, decidí escribir las instrucciones para conectar los cables y así reducir la probabilidad de que mis dispositivos prendan fuego.</p>
+<p>Lo primero, por supuesto, es <a href="https://developer.ubuntu.com/en/snappy/start/">instalar snappy en la tarjeta SD</a>. Luego, comprar uno de estos <a href="http://www.adafruit.com/products/954">cables FTDI</a> que convierten de USB a serial. Este cable se puede usar en ambos dispositivos porque tiene los conectores separados. El cable <em>negro</em> es <strong>tierra</strong> (GND), el cable <em>blanco</em> es para <strong>recibir datos en el puerto USB</strong>, el cable <em>verde</em> es para <strong>transmitir datos desde el puerto USB</strong> ye el cable <em>rojo</em> es de <strong>corriente eléctrica de 5V</strong>.</p>
+<h1 id="beaglebone-black">BeagleBone Black</h1>
+<p>El <a href="https://www.adafruit.com/product/1876">BeagleBone Black Rev C</a> tiene 6 pines. Hay un punto blanco al lado del primer pin. Conecte el cable negro GND al primer pin, el cable verde al cuarto pin y el cable blanco al quinto pin. En el BeagleBone<strong>NUNCA conecte el cable rojo</strong>.</p>
+<p><a href="https://ia601501.us.archive.org/11/items/snappy-bbb/1-board-serial-pins-compress.jpg"> <img src="https://ia601501.us.archive.org/11/items/snappy-bbb/1-board-serial-pins-compress.jpg" alt="image"></a></p>
+<p><a href="https://ia601501.us.archive.org/11/items/snappy-bbb/2-1-serial_cables.jpg"> <img src="https://ia601501.us.archive.org/11/items/snappy-bbb/2-1-serial_cables.jpg" alt="image"></a></p>
+<h1 id="raspberry-pi">Raspberry Pi</h1>
+<p>El <a href="https://www.adafruit.com/products/2358">Raspberry Pi 2 Model B</a> tiene 40 pines. <a href="http://www.pighixxx.com/test/2015/06/raspberry-pi-v2-mod-b-pinout/#prettyPhoto%5Bgallery1105%5D/0/">Aquí</a> hay un bonito dibujo del pinout con los números y las funciones de los pines.</p>
+<p>Conecte el cable negro GND al sexto pin, el cable blanco al octavo pin y el cable verde al décimo pin. De forma opcional puede darle corriente al Raspberry conectando el cable rojo al segundo pin, pero si hace esto NO conecte el cable de poder USB porque <strong>no es posible usar ambas fuentes de poder</strong>.</p>
+<p><a href="https://ia601502.us.archive.org/29/items/image20150609_054825862/6-pins-highlight.jpg"> <img src="https://ia601502.us.archive.org/29/items/image20150609_054825862/6-pins-highlight.jpg" alt="image"></a></p>
+<p><a href="https://ia601502.us.archive.org/29/items/image20150609_054825862/7-serial.jpg"> <img src="https://ia601502.us.archive.org/29/items/image20150609_054825862/7-serial.jpg" alt="image"></a></p>
+<h1 id="consola-serial">Consola serial</h1>
+<p>Instale screen:</p>
+<pre><code>  sudo apt-get install screen</code></pre>
+<p>Conecte el otro extremo del cable a un puerto USB de su computadora y busque el nombre del dispositivo tty:</p>
+<pre><code>  ls /dev/ttyUSB*</code></pre>
+<p>Inicie la sesión de screen en la terminal serial, reemplazando <code>/dev/ttyUSB?</code> con el número de su dispositivo.</p>
+<pre><code>  sudo screen {/dev/ttyUSB?} 115200</code></pre>
+<p>Por último, inserte la tarjeta SD y conecte el cable de poder de su dispositivo. Ahora podrá ver los mensajes de arranque en la termina, y al final snappy le permitirá inciar la sesión. El usuario predeterminado es <em>ubuntu</em> y la contraseña predeterminada también es <em>ubuntu</em>.</p>
+<p><a href="https://ia601501.us.archive.org/11/items/snappy-bbb/6-booted.png"> <img src="https://ia601501.us.archive.org/11/items/snappy-bbb/6-booted.png" alt="image"></a></p>
+<p>Snappy tiene un servidor SSH preinstalado. Una vez que el arranque ha sido exitoso, se puede iniciar sesión a través de SSH, lo que nos da una mejor experiencia. Esta terminal serial se puede usar para obtener la dirección IP del dispositivo:</p>
+<pre><code>  ip addr show</code></pre>
+<p>Y desde una terminal diferente, reemplazando <code>ip</code> con la dirección IP del dispositivo:</p>
+<pre><code>  ssh ubuntu@{ip}</code></pre>
+<p>Ahora estamos listos para empezar a jugar con snappy en el dispositivo. No se pierdan del <a href="https://developer.ubuntu.com/en/snappy/tutorials/using-snappy/">tour</a>.</p>
+<p>Para salir de la consola serial, presione <code>CTRL+a</code> y luego <code>k</code>.</p>
+<h2 id="más-información-sobre-los-cables-y-la-consola-serial">Más información sobre los cables y la consola serial</h2>
+<ul>
+<li><p><a href="http://elinux.org/Beagleboard:BeagleBone_Black_Serial">http://elinux.org/Beagleboard:BeagleBone_Black_Serial</a></p></li>
+<li><p><a href="https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/connect-the-lead">https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/connect-the-lead</a></p></li>
+<li><p><a href="http://dave.cheney.net/2013/09/22/two-point-five-ways-to-access-the-serial-console-on-your-beaglebone-black">http://dave.cheney.net/2013/09/22/two-point-five-ways-to-access-the-serial-console-on-your-beaglebone-black</a></p></li>
+</ul>
+<div class="references">
+
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/awful-shape-what-art-thou/" class="u-url">Awful Shape, what art thou?</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/awful-shape-what-art-thou/" rel="bookmark"><time class="published dt-published" datetime="2014-02-10T22:16:49-06:00" title="2014-02-10 22:16">2014-02-10 22:16</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <blockquote>
+<p>JUPITER<br>[...]<br>Awful Shape, what art thou? Speak!<br><br>DEMOGORGON<br>Eternity – demand no direr name.<br>Descend, and follow me down the abyss;<br>I am thy child, as thou wert Saturn’s child,<br>Mightier than thee; and we must dwell together<br>Hencefoth in darkness. –Lift thy lightnings not.<br>The tyranny of Heaven none may retain,<br>Or reassume, or hold succeeding thee...<br>Yet if thou wilt–as ’tis the destiny<br>Of trodden worms to writhe til they are dead–<br>Put forth thy might.</p>
+</blockquote>
+<p>on Prometheus Unbound, Act III, Scene I</p>
+<div class="references">
+
+</div>
+    </div>
+    </article><article class="h-entry post-text"><header><h1 class="p-name entry-title"><a href="blog/there-is-no-god/" class="u-url">There is no God</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Leo Arias
+            </span></p>
+            <p class="dateline"><a href="blog/there-is-no-god/" rel="bookmark"><time class="published dt-published" datetime="2013-06-10T12:14:00-06:00" title="2013-06-10 12:14">2013-06-10 12:14</time></a></p>
+        </div>
+    </header><div class="e-content entry-content">
+    <blockquote>
+<p>I was an infant when my mother went<br>To see an atheist burned. She took me there:<br>The dark-robed priests were met around the pile;<br>The multitude was gazing silently;<br>And as the culprit passed with dauntless mien,<br>Tempered disdain in his unaltering eye,<br>Mixed with a quiet smile, shone calmly forth:<br>The thirsty fire crept round his manly limbs;<br>His resolute eyes were scorched to blindness, soon;<br>His death-pang rent my heart! the insensate mob<br>Uttered a cry of triumph, and I wept.<br>“Weep not, child!” cried my mother, “for that man<br>Has said, ’There is no God.’”<br></p>
+</blockquote>
+<p>on Queen Mab, Canto VII</p>
+<div class="references">
+
+</div>
+    </div>
+    </article>
+</div>
+
+        <nav class="postindexpager"><ul class="pager">
+<li class="previous">
+                <a href="index-2.html" rel="prev">Publicaciones posteriores</a>
+            </li>
+        </ul></nav>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a>Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a>
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../assets/js/all-nocdn.js"></script><script src="../assets/js/colorbox-i18n/jquery.colorbox-es.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("es");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>

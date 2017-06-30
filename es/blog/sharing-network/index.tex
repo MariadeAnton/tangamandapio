@@ -1,0 +1,92 @@
+\documentclass[12pt]{article}
+
+\usepackage{cite}
+\usepackage{graphicx}
+
+\title{Sharing the Wi-Fi connection through Ethernet}
+
+\begin{document}
+
+My apartment was clearly not designed for the Internet of Things. I have a
+weird set up to connect all my devices: there's ADSL, Ethernet, Wi-Fi,
+powerline networking, 4G from a free promotion until I download 3GB and then
+3G for the rest of the month... It's crazy, and getting crazier as I have to
+test more and more devices for
+\href{https://developer.ubuntu.com/en/snappy/start/}{snappy}. When I was about
+to throw a cable from the kitchen to the office I found about
+\href{http://askubuntu.com/a/174027/61416}{sharing the network} (thanks
+\href{https://askubuntu.com/users/7035/luis-alvarado}{Luis}!). Now let me
+repeat a slightly modified version of part of Luis' answer to show how I
+share my wireless connection through an ethernet cable with my test board.
+
+\begin{enumerate}
+  \item Open the network indicator.
+  \item Click \emph{Edit Connections...}.
+    \begin{center}
+      \href{
+        https://ia601505.us.archive.org/25/items/elopio-screenshots/shared1.png}{
+        \includegraphics[width=500px]{
+          https://ia601505.us.archive.org/25/items/elopio-screenshots/shared1.png}
+      }
+      \caption{Network indicator menu}
+    \end{center}
+  \item On the \emph{Network Connections} dialog, click the \emph{Add} button.
+    \begin{center}
+      \href{
+        https://ia601505.us.archive.org/25/items/elopio-screenshots/shared2.png}{
+        \includegraphics[width=500px]{
+          https://ia601505.us.archive.org/25/items/elopio-screenshots/shared2.png}
+      }
+      \caption{Network Connections dialog}
+    \end{center}
+  \item On the \emph{Choose a Connection Type} dialog, select \emph{Ethernet}.
+    \begin{center}
+      \href{
+        https://ia601505.us.archive.org/25/items/elopio-screenshots/shared3.png}{
+        \includegraphics[width=500px]{
+          https://ia601505.us.archive.org/25/items/elopio-screenshots/shared3.png}
+      }
+      \caption{Choose a Connection Type dialog}
+    \end{center}
+  \item On the \emph{Editing} dialog, enter a name for the connection.
+  \item Go to the \emph{IPv4 Settings} tab.
+  \item Select the Method \emph{Shared to other computers}.
+    \begin{center}
+      \href{
+        https://ia601505.us.archive.org/25/items/elopio-screenshots/shared4.png}{
+        \includegraphics[width=500px]{
+          https://ia601505.us.archive.org/25/items/elopio-screenshots/shared4.png}
+      }
+      \caption{Editing dialog}
+    \end{center}
+  \item Click the \emph{Save} button.
+\end{enumerate}
+
+What's left is to connect an Ethernet cable from your laptop to the board,
+give power to the board and wait for it to finish booting.
+
+To get the IP of the board you can run the \verb$arp$ command (Thanks to
+Alex for the tip). It will show you the addresses of the neighbour machines.
+The one of your board will be like \verb$10.42.0.?$. Now you can ssh into the
+board using the default credentials (username \verb$ubuntu$, password
+\verb$ubuntu$) or the ones you configured.
+
+\begin{center}
+  \href{
+    https://ia601505.us.archive.org/33/items/JaquerEspeis-bbb-snappy/image20160302_194108865.jpg}{
+    \includegraphics[width=500px]{
+      https://ia601505.us.archive.org/33/items/JaquerEspeis-bbb-snappy/image20160302_194108865.jpg}
+  }
+  \caption{BeagleBone connected to a laptop through the Ethernet cable}
+\end{center}
+
+This also proved to be useful during our
+\href{https://archive.org/details/JaquerEspeis-bbb-snappy}{first snappy maker
+night}, when we had to connect many boards to play with the system.
+
+Pro tip: If you are having problems connecting through \verb$ssh$, you can
+connect
+\href{http://elopio.net/blog/connecting-to-snappy-through-the-serial-console/}
+{through the serial console} to check for errors.
+
+\end{document}

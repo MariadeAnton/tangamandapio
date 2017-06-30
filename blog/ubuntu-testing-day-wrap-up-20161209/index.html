@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ubuntu Testing Day wrap up - Unity8 (20161209) | Tangamandapio</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS (en)" href="../../rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (eo)" href="../../eo/rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (es)" href="../../es/rss.xml">
+<link rel="canonical" href="http://elopio.net/blog/ubuntu-testing-day-wrap-up-20161209/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Leo Arias">
+<link rel="prev" href="../setup-apt-cache/" title="Set up a cache for deb packages" type="text/html">
+<link rel="next" href="../test-sru/" title="Test a stable release update" type="text/html">
+<meta property="og:site_name" content="Tangamandapio">
+<meta property="og:title" content="Ubuntu Testing Day wrap up - Unity8 (20161209)">
+<meta property="og:url" content="http://elopio.net/blog/ubuntu-testing-day-wrap-up-20161209/">
+<meta property="og:description" content="For the third session of the Ubuntu Testing Days,
+Kevin Gunn joined us to talk
+about the Unity8 snap.
+This is a thriving project with lots of things to do and bugs to uncover, so
+it's the perfect cand">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2016-12-13T09:41:13-06:00">
+<meta property="article:tag" content="free software">
+<meta property="article:tag" content="testing">
+<meta property="article:tag" content="ubuntu">
+<link rel="alternate" hreflang="eo" href="../../eo/blog/ubuntu-testing-day-wrap-up-20161209/">
+<link rel="alternate" hreflang="es" href="../../es/blog/ubuntu-testing-day-wrap-up-20161209/">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://elopio.net/">
+
+                <span id="blog-title">Tangamandapio</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../archive.html">Archive</a>
+                </li>
+<li>
+<a href="../../categories/">Tags</a>
+                </li>
+<li>
+<a href="../../rss.xml">RSS feed</a>
+                </li>
+<li>
+<a href="../../notebook">Notebook</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+            </li>
+<li><a href="http://elopio.net/eo/" rel="alternate" hreflang="eo">Esperante</a></li>
+            <li><a href="http://elopio.net/es/" rel="alternate" hreflang="es">Español</a></li>
+
+                
+                    
+    <li>
+    <a href="index.md" id="sourcelink">Source</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Ubuntu Testing Day wrap up - Unity8 (20161209)</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                    Leo Arias
+            </span></p>
+            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2016-12-13T09:41:13-06:00" itemprop="datePublished" title="2016-12-13 09:41">2016-12-13 09:41</time></a></p>
+            
+        <p class="sourceline"><a href="index.md" class="sourcelink">Source</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>For the third session of the Ubuntu Testing Days,
+<a href="https://plus.google.com/+KevinGunnCanonical">Kevin Gunn</a> joined us to talk
+about the Unity8 snap.</p>
+<p>This is a thriving project with lots of things to do and bugs to uncover, so
+it's the perfect candidate for newcomers eager to help Ubuntu.</p>
+<p>If you are interested and didn't attend our meeting on Friday, click the image
+below to watch the recording.</p>
+<p><a href="https://www.youtube.com/watch?v=oGsA55RvqLI"><img alt="Alt text" src="https://img.youtube.com/vi/oGsA55RvqLI/0.jpg"></a></p>
+<p>To install Unity 8 in the Ubuntu 16.04
+<a href="http://elopio.net/blog/pristine-vm/">cloned virtual machine</a>
+that we prepared on the past session, enter the following commands in the terminal:</p>
+<pre class="code literal-block"><span></span>$ sudo add-apt-repository -u ppa:ci-train-ppa-service/stable-phone-overlay
+$ sudo apt install unity8-session-snap
+$ unity8-snap-install
+$ sudo reboot
+</pre>
+
+
+<p>After reboot, on the login screen click the Ubuntu icon next to your user name
+and change the selection to Unity 8.</p>
+<p>Kevin and his team have a
+<a href="https://docs.google.com/document/d/1o-jKITqUxRsujmN3OwRj3wRnn6dgblKuvrhKjeN8-Wc/edit#heading=h.q06bivmaid8f">google doc with the instructions to build and install the snap, and the
+current status</a>.
+If you find a bug, you can talk to the developers joining the
+<a href="http://webchat.freenode.net/?channels=#ubuntu-touch">#ubuntu-touch IRC channel on freenode</a></p>
+<p>While preparing the testing environment on this session we had a crash, and
+explained how easy it is to send the report to the Ubuntu developers by just
+clicking the <em>Report problem...</em> button. The reports from all our users
+are in the <a href="https://errors.ubuntu.com/">error tracker</a>, along with a frequency
+graph and the links to bug reports where those crashes are being fixed.</p>
+<p>We also showed two tricks to make faster and more pleasant the testing session
+in a virtual machine:</p>
+<ul>
+<li><a href="http://elopio.net/blog/setup-apt-cache/">Set up a cache for deb packages</a></li>
+<li><a href="http://askubuntu.com/questions/858649/how-can-i-copypaste-from-the-host-to-a-kvm-guest">Share the clipboard between the host and the guest</a></li>
+</ul>
+<p>Thanks to <a href="https://twitter.com/la_juyis">Julia</a>,
+<a href="https://twitter.com/rainveil">Kyle</a> and
+<a href="https://plus.google.com/+KevinGunnCanonical">Kevin</a> for the nice session.</p>
+<p>Join us again next Friday at <a href="https://ubuntuonair.com">Ubuntu On-Air</a>.</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/free-software/" rel="tag">free software</a></li>
+            <li><a class="tag p-category" href="../../categories/testing/" rel="tag">testing</a></li>
+            <li><a class="tag p-category" href="../../categories/ubuntu/" rel="tag">ubuntu</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../setup-apt-cache/" rel="prev" title="Set up a cache for deb packages">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../test-sru/" rel="next" title="Test a stable release update">Next post</a>
+            </li>
+        </ul></nav></aside></article>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a>Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a>
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("en");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>

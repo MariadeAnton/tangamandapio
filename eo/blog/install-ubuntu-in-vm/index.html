@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="eo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Ubuntu in a virtual machine | Tangamandapio</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS (en)" href="../../../rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (eo)" href="../../rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (es)" href="../../../es/rss.xml">
+<link rel="canonical" href="http://elopio.net/eo/blog/install-ubuntu-in-vm/">
+<!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Leo Arias">
+<link rel="prev" href="../download-ubuntu/" title="Download the latest Ubuntu LTS" type="text/html">
+<link rel="next" href="../ubuntu-testing-day-wrap-up-20161125/" title="Ubuntu Testing Day wrap up - 20161125" type="text/html">
+<meta property="og:site_name" content="Tangamandapio">
+<meta property="og:title" content="Install Ubuntu in a virtual machine">
+<meta property="og:url" content="http://elopio.net/eo/blog/install-ubuntu-in-vm/">
+<meta property="og:description" content="There are multiple ways to test Ubuntu. The most simple, and most dangerous is to just use your real Ubuntu machine to install and try things. I wouldn’t recommend this one to begin with, because we w">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2016-11-24T23:13:13-06:00">
+<meta property="article:tag" content="free software">
+<meta property="article:tag" content="testing">
+<meta property="article:tag" content="ubuntu">
+<link rel="alternate" hreflang="en" href="../../../blog/install-ubuntu-in-vm/">
+<link rel="alternate" hreflang="es" href="../../../es/blog/install-ubuntu-in-vm/">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Salti al ĉefenhavo</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Ŝalti menuon</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://elopio.net/eo/">
+
+                <span id="blog-title">Tangamandapio</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../archive.html">Arĥivo</a>
+                </li>
+<li>
+<a href="../../categories/">Etikedoj</a>
+                </li>
+<li>
+<a href="../../rss.xml">RSS feed</a>
+                </li>
+<li>
+<a href="../../../notebook">Notlibro</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+            </li>
+<li><a href="http://elopio.net/" rel="alternate" hreflang="en">English</a></li>
+            <li><a href="http://elopio.net/es/" rel="alternate" hreflang="es">Español</a></li>
+
+                
+                    
+    <li>
+    <a href="index.tex" id="sourcelink">Fonto</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Install Ubuntu in a virtual machine</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                    Leo Arias
+            </span></p>
+            <p class="dateline"><a href="." rel="bookmark"><time class="published dt-published" datetime="2016-11-24T23:13:13-06:00" itemprop="datePublished" title="2016-11-24 23:13">2016-11-24 23:13</time></a></p>
+            
+        <p class="sourceline"><a href="index.tex" class="sourcelink">Fonto</a></p>
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <p>There are multiple ways to test Ubuntu. The most simple, and most dangerous is to just use your real Ubuntu machine to install and try things. I wouldn’t recommend this one to begin with, because we will be using experimental software that it’s likely to completely break your operating system every now and then.</p>
+<p>This is not so terrible. Unless you are dealing with low-level stuff, the worst case scenario will be solved by reinstalling Ubuntu. And usually it won’t even come to that. My machines always have the unreleased unstable version of Ubuntu, and I’m often learning interesting things by trying to recover the mess I make. But let’s not get to that yet, let’s first see other options.</p>
+<p>My preferred way to test graphical applications is to use <a href="https://en.wikipedia.org/wiki/Kernel-based_Virtual_Machine">Kernel-based Virtual Machine</a> (KVM) and <a href="https://en.wikipedia.org/wiki/Virtual_Machine_Manager">Virtual Machine Manager</a> hosted on my real machine. A virtual machine emulates a real machine. It is completely isolated from the host where it runs, so you can freely experiment in it without the risk of breaking a machine that you will later need for something else. If things go crazy, just throw away the virtual machine and start again. The downside is that it’s slower than testing in some of the alternatives, like LXC or Docker. But I like it because it gives me an environment that’s really close to what a user would get when he installs Ubuntu on his machine. Also it’s really simple with the Virtual Machine Manager.</p>
+<p>For this I’m going to assume that you have a machine with Ubuntu already. If you don’t have one, you can follow this <a href="https://www.ubuntu.com/download/desktop/install-ubuntu-desktop">guide to install Ubuntu</a> by yourself, or you can contact somebody from your Local Community Team using the <a href="http://loco.ubuntu.com/">LoCo Portal</a>. There’s always somebody who would like to meet and help a new Ubuntero or Ubuntera to get started. And in case of doubt, just ask your question in <a href="https://askubuntu.com/">Ask Ubuntu</a> and you will get quick help there too.</p>
+<p>To install everything, let’s open a terminal, like Mr. Robot. Click the Ubuntu icon on the top-left of the screen, type <code>terminal</code> and click on the first result.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/1-terminal.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/1-terminal.png" alt="image"></a></p>
+<p>Many of the things we do with commands in the terminal can also be done using graphical applications. The terminal might seem overcomplicated at first, but soon you will notice that it’s easier to get lost trying to click buttons. In here we will do both; for some things I like commands, for some I like buttons. However, the first rule is to never enter a command that you don’t understand; and you should be specially suspicious if the command asks for your password. If you don’t understand what you are doing, <a href="https://lmgtfy.com/?q=sudo">search</a> and <a href="https://askubuntu.com/questions/112069/nothing-shows-up-in-the-terminal-when-i-type-my-password">ask</a>.</p>
+<p>Now, on the terminal, type:</p>
+<pre><code>  sudo apt install qemu-kvm libvirt-bin bridge-utils virt-manager</code></pre>
+<p>And press enter.</p>
+<p><em>sudo</em> is the command to execute other commands as a super user. You will need super user permissions to do administrative actions on the machine, like installing new software. <em>apt</em> is used to manage packages. So in here we are telling the machine to install 4 packages using apt as an administrator. The 4 packages are the software we will use to create and manage virtual machines.</p>
+<p>The first thing that <em>sudo</em> will do is to ask for your password.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/2-password.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/2-password.png" alt="image"></a></p>
+<p>Again, make sure that you are only following command line instructions from a trusted source, like me <code>^_^</code> And make sure that you know what you are doing before pressing enter.</p>
+<p>Type your user password in the terminal and press enter. The password will be hidden so nobody else can see it while you are typing it, but don’t worry, after pressing enter the command will proceed with the installation.</p>
+<p>You will know that it finished because you will be presented with a <a href="https://en.wikipedia.org/wiki/Command-line_interface#Command_prompt">prompt</a> again, something like <code>user@machine:~$</code> which indicates that the terminal is ready to receive a new command.</p>
+<p>Now let’s jump back to the graphical user interface. Click again the top-left Ubuntu icon, type <code>virtual machine manager</code> and click the first result.</p>
+<p>The Virtual Machine Manager window will be opened. So let’s create a new machine clicking the top-left shiny icon.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/4-newmachine.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/4-newmachine.png" alt="image"></a></p>
+<p>This will open a dialog to choose the installation method. We will install Ubuntu from an <a href="https://en.wikipedia.org/wiki/ISO_image">ISO image file</a>. If you don’t have one, you can follow the previous <a href="http://elopio.net/blog/download-ubuntu/">guide to download the latest Ubuntu version with Long Term Support</a>. Once you get it, select the <em>Local install media</em> option and click the <em>Forward</em> button.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/5-local-iso.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/5-local-iso.png" alt="image"></a></p>
+<p>In the next dialog page, click the <em>Browse</em> button, which will open a new dialog. In the new one, click <em>Browse Local</em>, which will open yet another dialog where you should select the downloaded Ubuntu ISO file (and now you see why I said that the command line was often easier :) Back at the first dialog, clilck the <em>Forward</em> button.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/8-iso-selected.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/8-iso-selected.png" alt="image"></a></p>
+<p>Next step is to select the amount of resources that you want to give to this virtual machine. If you give it a lot of resources, it will be faster, but then your real machine will be slower. So you have to balance both, another downside of using full virtual machines instead of ligher ways to simulate a machine. For your first machine, maybe just leave the default values. Pay attention at how the virtual and real machine feel, and next time choose a different value to compare.</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/9-resources.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/9-resources.png" alt="image"></a></p>
+<p>So, <em>Forward</em> one more time and now we can choose the size of the disk of the virtual machine. I have found that 20GiB is generally enough, and you will throw away your machine long before you fill the space. Less than that and you will likely get the disk full and will have to resize it, which is kind of boring. I will paste the command for that some other day. <em>Forward</em>!</p>
+<p><a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/10-disk.png"> <img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/virtual-machine/10-disk.png" alt="image"></a></p>
+<p>And this is the last step, at least for this post. Enter a name for the virtual machine and click <em>Finish</em>.</p>
+<p>Here the interesting part begins, finally. You will see the virtual machine booting, just like a real one does. It will start the live Ubuntu system, which runs from volatile memory, so you have to install it in the hard disk of the virtual machine to make it permanent. And then again, as it emulates a real machine, the steps to install Ubuntu in a virtual machine are the same to install it in a real one, so the same <em>https://www.ubuntu.com/download/desktop/install-ubuntu-desktop</em> <span>guide to install a desktop machine</span> that I linked earlier will be useful.</p>
+<p>Once the virtual machine reboots, take some time to play with the user interface of Virtual Machine Manager. You will find controls to start, shutdown and reset the machine, and some more advanced options to change the hardware it is emulating. Remember that you can’t break your real machine, so play, make a mess, and start again.</p>
+<p>If you want to learn some more about Ubuntu, and collaborate with the community, join us in the Ubuntu Testing Days, every Friday in <a href="http://ubuntuonair.com/">Ubuntu On Air</a>. We will use virtual machines and other tools to test cool free software projects.</p>
+<div class="references">
+
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/free-software/" rel="tag">free software</a></li>
+            <li><a class="tag p-category" href="../../categories/testing/" rel="tag">testing</a></li>
+            <li><a class="tag p-category" href="../../categories/ubuntu/" rel="tag">ubuntu</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../download-ubuntu/" rel="prev" title="Download the latest Ubuntu LTS">Antaŭa artikolo</a>
+            </li>
+            <li class="next">
+                <a href="../ubuntu-testing-day-wrap-up-20161125/" rel="next" title="Ubuntu Testing Day wrap up - 20161125">Venonta artikolo</a>
+            </li>
+        </ul></nav></aside></article>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a>Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a>
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("eo");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>

@@ -1,0 +1,46 @@
+* Maps
+
+  [[http://academy.cartodb.com/][Academy at cartodb]]
+  [[https://www.udemy.com/an-introduction-to-working-with-electronic-maps/][qgis]]
+
+* Linux
+
+  [[http://eudyptula-challenge.org/][The Eudyptula Challenge]]
+
+  [[https://www.edx.org/course/introduction-openstack-linuxfoundationx-lfs152x][Openstack]]
+
+  [[https://www.udacity.com/course/scalable-microservices-with-kubernetes--ud615][kubernetes]]
+
+* FPGA
+
+  [[http://www.nandland.com/articles/fpga-101-fpgas-for-beginners.html][FGPA Fundamentals]]
+
+* BeagleBoneBlack
+
+  [[http://www.element14.com/community/docs/DOC-78585/l/beaglebone-black-webinar-series?CMP%3DSOM-MCM-PRG-bbb][BeagleBone Black Webinar Series]]
+
+* Arduino
+
+  http://www.instructables.com/class/Arduino-Class/
+
+* Random
+
+  [[https://www.coursera.org/learn/gamification/home/info][Gamification]]
+
+  [[https://www.udacity.com/course/deep-learning--ud730][Deep Learning]]
+
+  [[https://www.udacity.com/courses/ud061][Computability, Complexity & Algorithms]]
+
+  [[https://www.udacity.com/courses/ud810][Introduction to Computer Vision]]
+
+  [[https://www.coursera.org/specializations/3d-printing][3d printing]]
+
+  [[http://underactuated.csail.mit.edu/underactuated.html][Underactuated robots]]
+
+  [[https://www.coursera.org/learn/wireless-communication-technologies][Wireless]]
+
+  [[https://www.coursera.org/learn/subsistence-marketplaces#creators][Subsistence Marketplaces]]
+
+  [[https://www.youtube.com/playlist?list%3DPLXS8JJHIn4nEv_LcXIaklH_QAZaDEVD8q][blockstack]]
+
+  [[https://www.youtube.com/playlist?list%3DPL2FF649D0C4407B30][Learning to Learn]]

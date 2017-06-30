@@ -1,0 +1,4 @@
+Sitemap: http://elopio.net/sitemapindex.xml
+
+User-Agent: *
+Host: elopio.net

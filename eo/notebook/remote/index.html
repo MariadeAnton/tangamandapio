@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="eo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remote setup | Tangamandapio</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS (en)" href="../../../rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (eo)" href="../../rss.xml">
+<link rel="alternate" type="application/rss+xml" title="RSS (es)" href="../../../es/rss.xml">
+<link rel="canonical" href="http://elopio.net/eo/notebook/remote/">
+<!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]--><meta name="author" content="Leo Arias">
+<meta property="og:site_name" content="Tangamandapio">
+<meta property="og:title" content="Remote setup">
+<meta property="og:url" content="http://elopio.net/eo/notebook/remote/">
+<meta property="og:description" content="Old keys
+Drop the old ssh keys for remote-devel on launchpad and github.
+Canonistack hub
+
+Make an m1.small canonistack instance with ssh and mosh ports open.
+Go to gandi and add the canonistack DNS en">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2016-11-20T10:58:39-06:00">
+<meta property="article:tag" content="machines">
+<link rel="alternate" hreflang="en" href="../../../notebook/remote/">
+<link rel="alternate" hreflang="es" href="../../../es/notebook/remote/">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Salti al ĉefenhavo</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-inverse navbar-static-top"><div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
+            <span class="sr-only">Ŝalti menuon</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://elopio.net/eo/">
+
+                <span id="blog-title">Tangamandapio</span>
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse" id="bs-navbar" aria-expanded="false">
+            <ul class="nav navbar-nav">
+<li>
+<a href="../../archive.html">Arĥivo</a>
+                </li>
+<li>
+<a href="../../categories/">Etikedoj</a>
+                </li>
+<li>
+<a href="../../rss.xml">RSS feed</a>
+                </li>
+<li>
+<a href="../../../notebook">Notlibro</a>
+
+                
+            </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+            </li>
+<li><a href="http://elopio.net/" rel="alternate" hreflang="en">English</a></li>
+            <li><a href="http://elopio.net/es/" rel="alternate" hreflang="es">Español</a></li>
+
+                
+                    
+    <li>
+    <a href="index.md" id="sourcelink">Fonto</a>
+    </li>
+
+                
+            </ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        <div class="row">
+            
+            
+<article class="post-text storypage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Remote setup</a></h1>
+
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<h2>Old keys</h2>
+<p>Drop the old ssh keys for remote-devel on launchpad and github.</p>
+<h2>Canonistack hub</h2>
+<ol>
+<li>Make an m1.small canonistack instance with ssh and mosh ports open.</li>
+<li>Go to gandi and add the <code>canonistack</code> DNS entry for this instance.</li>
+<li>ssh (with <code>-i .canonistack/elopio_lcy02.key</code>) into the new machine and:</li>
+</ol>
+<pre class="code literal-block"><span></span>    sudo adduser elopio
+    sudo adduser elopio sudo
+    su elopio
+    ssh-import-id elopio
+    exit
+    exit
+</pre>
+
+
+<ol>
+<li>ssh into the machine again as elopio and:</li>
+</ol>
+<pre class="code literal-block"><span></span>    sudo deluser ubuntu
+    sudo rm -rf ubuntu
+    exit
+</pre>
+
+
+<ol>
+<li>Copy the openstack configuration file from the host:</li>
+</ol>
+<pre class="code literal-block"><span></span>    scp ~/.canonistack/novarc_lcy02 elopio@canonistack.elopio.net:/tmp
+    ssh elopio@canonistack.elopio.net
+    mkdir ~/.canonistack
+    mv /tmp/novarc_lcy02 ~/.canonistack/
+    source ~/.canonistack/novarc_lcy02
+    sudo snap install juju --beta --classic
+</pre>
+
+
+<ol>
+<li>On the canonistack machine, follow the CDO shared controllers instructions.</li>
+</ol>
+<pre class="code literal-block"><span></span>    sudo snap install charm --classic
+    mkdir workspace
+</pre>
+
+
+<h2>Remote communications</h2>
+<ol>
+<li>On the canonistack machine:</li>
+</ol>
+<pre class="code literal-block"><span></span>    cd ~/workspace
+    git clone https://github.com/elopio/remote-comms
+    cd remote-comms
+    charm build
+    cd builds
+    juju add-model remote-comms --credential canonistack
+    juju deploy ./remote-comms
+    juju expose remote-comms
+    juju ssh remote-comms/0
+</pre>
+
+
+<ol>
+<li>
+<p>On the remote-comms machine:</p>
+<ul>
+<li>ssh-import-id elopio</li>
+<li>replace $freenode_password in ~/.weechat/irc.conf</li>
+<li>replace $personal_email_password in ~/.msmtprc and ~/.offlineimaprc</li>
+<li>replace $canonical_google_password in ~/.msmtprc and ~/.offlineimaprc</li>
+</ul>
+</li>
+</ol>
+<h2>Remote devel</h2>
+<ol>
+<li>On the canonistack machine:</li>
+</ol>
+<pre class="code literal-block"><span></span>   cd ~/workspace
+   git clone https://github.com/elopio/remote-devel
+   cd remote-devel
+   charm build
+   cd builds
+   juju add-model remote-devel --credential canonistack
+   juju deploy ./remote-devel --constraints instance-type=cpu4-ram18-disk50-ephemeral20
+   juju expose remote-devel
+   juju ssh remote-devel/0
+</pre>
+
+
+<ol>
+<li>On the remote-devel machine:</li>
+</ol>
+<pre class="code literal-block"><span></span>   ssh-import-id elopio
+</pre>
+</div>
+    </div>
+    
+
+</article>
+</div>
+        <!--End of body content-->
+
+        <footer id="footer"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a>Licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>. - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a>
+            
+        </footer>
+</div>
+</div>
+
+
+            <script src="../../../assets/js/all-nocdn.js"></script><script>$('a.image-reference:not(.islink) img:not(.islink)').parent().colorbox({rel:"gal",maxWidth:"100%",maxHeight:"100%",scalePhotos:true});</script><!-- fancy dates --><script>
+    moment.locale("eo");
+    fancydates(0, "YYYY-MM-DD HH:mm");
+    </script><!-- end fancy dates -->
+</body>
+</html>

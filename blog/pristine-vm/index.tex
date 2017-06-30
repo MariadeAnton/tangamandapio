@@ -1,0 +1,90 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+
+\title{Clone virtual machines to keep a pristine image}
+
+\begin{document}
+
+The basic idea of using virtual machines for testing is to always start from a
+clean state, as close as possible to what a user would get after freshly
+installing the system on their real machines.
+
+So, every time we need to test something, we could
+\href{http://elopio.net/blog/install-ubuntu-in-vm/}
+     {create a new virtual machine and intall Ubuntu from scratch there},
+but that would take a considerable amount of time.
+
+An alternative is to install a machine once, and keep it clean. Never test in
+that one, and instead clone it every time you need to test something. Use the
+clone to experiment, and delete it when you are done. Cloning the machine is
+a lot faster than reinstalling each time. The base machine, the one you
+clone everytime, is called a pristine machine. If you are careful with it, the
+only time you will need to reinstall is when you are testing the installer.
+
+Cloning the pristine machine using Virtual Machine Manager is really simple,
+it's done in like two clicks.
+
+First, of course, you will need to
+\href{http://elopio.net/blog/install-ubuntu-in-vm/}
+     {install your pristine machine}.
+I always put pristine in the name, to make it less likely that I will start
+using it for testing. Every time I forget and play with the pristine machine,
+I'm polluting its state, and have to recreate it.
+
+With the pristine machine ready, I then recommend to open it and run in a
+terminal:
+
+\begin{verbatim}
+  sudo apt update && sudo apt upgrade
+\end{verbatim}
+
+That will update all the packages installed, so your clone starts also in the
+most up-to-date state. If you do this step every time, you will never have to
+wait for long while your machine downloads and installs lots of packages, just
+wait a little every day.
+
+\begin{center}
+  \href{
+    https://archive.org/download/elopio-screenshots2/clone/1-update.png}{
+    \includegraphics[width=500px]{
+    https://archive.org/download/elopio-screenshots2/clone/1-update.png}
+  }
+  \caption{Update the pristine virtual machine}
+\end{center}
+
+Now shut down the pristine machine and don't touch it again, only to update it.
+
+To clone it, right click on it and then click the \emph{Clone...} button.
+
+\begin{center}
+  \href{
+    https://archive.org/download/elopio-screenshots2/clone/2-clone.png}{
+    \includegraphics[width=500px]{
+    https://archive.org/download/elopio-screenshots2/clone/2-clone.png}
+  }
+  \caption{Clone a machine}
+\end{center}
+
+A dialog will be opened, where you can enter the new virtual machine details.
+
+\begin{center}
+  \href{
+    https://archive.org/download/elopio-screenshots2/clone/3-cloneinfo.png}{
+    \includegraphics[width=500px]{
+    https://archive.org/download/elopio-screenshots2/clone/3-cloneinfo.png}
+  }
+  \caption{Clone dialog}
+\end{center}
+
+I always write the date as part of the name, to remember when I created it.
+But the most important thing to do here is to make sure that the \emph{Storage}
+option is set to \emph{Clone this disk}. Otherwise, you will be sharing the disk
+with the pristine machine, which will pollute its state, the exact thing we are
+trying to avoid.
+
+This will take some time while the whole disk is copied. But not long, and
+once it's done you can freely play and pollute this clone, without affecting the
+pristine machine.
+
+\end{document}

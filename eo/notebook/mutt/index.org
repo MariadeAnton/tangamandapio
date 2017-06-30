@@ -1,0 +1,10 @@
+* Reading email
+
+  * d: delete the current message
+  * [space]: next page
+  * -: previous page
+  * s: save message
+
+* Writing email
+
+  * g: reply all (reply group)

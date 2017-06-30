@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../../assets/xml/rss.xsl" media="all"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Tangamandapio (Artikoloj pri snappy)</title><link>http://elopio.net/</link><description></description><atom:link rel="self" type="application/rss+xml" href="http://elopio.net/eo/categories/snappy.xml"></atom:link><language>eo</language><lastBuildDate>Fri, 30 Jun 2017 10:45:53 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>On writing my first snaps, and keeping my passwords secure everywhere</title><link>http://elopio.net/eo/blog/first-snaps/</link><dc:creator>Leo Arias</dc:creator><description>&lt;p&gt;I’ve been writing snaps for a year, more or less. But all the snaps I had written were a one-time thing to reproduce a bug, automate a scenario, or explore a specific code path. A few months ago I decided to write one snap that I would use day-to-day. The application I use the most by far is keepass, so that seemed like a good place to start.&lt;/p&gt;
+&lt;h1 id="kpcli"&gt;kpcli&lt;/h1&gt;
+&lt;p&gt;With &lt;a href="https://github.com/alecsammon/kpcli"&gt;kpcli&lt;/a&gt; I access my password database from the command line. It’s just one big perl script, but not as ugly as it sounds :) That was a great first experiment because I haven’t tried perl in a snap before, and it would let me access the passwords from my beagle bone black in a secure and confined way.&lt;/p&gt;
+&lt;p&gt;Because it is a script, I just need to copy it into the snap. Of course, there’s a plugin for that! &lt;a href="http://snapcraft.io/"&gt;snapcraft&lt;/a&gt; is a meta-packaging tool to generate snaps. It comes with plugins for many packaging tools, &lt;em&gt;copy&lt;/em&gt; being the most simple of them. Run:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ sudo apt install snapcraft
+  $ snapcraft help copy&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The next step is to look at the dependencies. Luckily, they are right there in the &lt;a href="https://github.com/alecsammon/kpcli/blob/master/README.md"&gt;README&lt;/a&gt; file, in the form of Ubuntu packages. snapcraft calls them &lt;em&gt;stage-packages&lt;/em&gt;, and they will be installed into the snap during the build.&lt;/p&gt;
+&lt;p&gt;Now I have almost all the difficult details to make the snap, and it was surprisingly easy. With this information, I wrote a part (&lt;a href="http://snapcraft.io/create/#parts-intro"&gt;read more about parts&lt;/a&gt;):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  kpcli:
+    source: https://github.com/alecsammon/kpcli.git
+    plugin: copy
+    files:
+      kpcli.pl: scripts/kpcli.pl
+    stage-packages:
+      - perl-base
+      - libcrypt-rijndael-perl
+      - libterm-readkey-perl
+      - libsort-naturally-perl
+      - libfile-keepass-perl
+      - libterm-shellui-perl
+      - libterm-readline-gnu-perl
+      - libclone-perl&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I am just missing a way to tell the command where to find the perl libraries that I am bundling inside the snap. There is &lt;a href="https://bugs.launchpad.net/snapcraft/+bug/1583259"&gt;work in progress&lt;/a&gt; to make it easier to set up environment variables before launching the command; but for my first simple snap, quick and easy will do. I wrote a wrapper script:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  #!/bin/sh
+
+  $SNAP/usr/bin/perl -I $SNAP/usr/share/perl/5.22 -I $SNAP/usr/lib/x86_64-linux-gnu/perl/5.22 -I $SNAP/usr/lib/x86_64-linux-gnu/perl5/5.22 -I $SNAP/usr/share/perl5 $SNAP/scripts/kpcli.pl&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and the corresponding part:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  launcher:
+    plugin: copy
+    files:
+      run.sh: scripts/run.sh&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally, I added details about the &lt;em&gt;name&lt;/em&gt;, &lt;em&gt;version&lt;/em&gt;, &lt;em&gt;summary&lt;/em&gt; and &lt;em&gt;description&lt;/em&gt; of the snap, and defined the kpcli &lt;em&gt;app&lt;/em&gt;. You can &lt;a href="https://github.com/ubuntu/snappy-playpen/blob/master/kpcli/snapcraft.yaml"&gt;download the source of this snapcraft.yaml&lt;/a&gt;, put it in a directory and run &lt;strong&gt;snapcraft&lt;/strong&gt; in there to generate it yourself. Or try mine installing it from the store:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ sudo snap install kpcli-elopio
+  $ kpcli-elopio.kpcli&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id="keepassx"&gt;KeepassX&lt;/h1&gt;
+&lt;p&gt;Ok, that solves command line access, but I also want some eye-candy, sometimes. &lt;a href="https://github.com/keepassx/keepassx.git"&gt;KeepassX&lt;/a&gt; gives me access to the same passwords database through a GUI. By the time I finished my CLI snap I saw work from &lt;a href="https://kyrofa.com/"&gt;kyrofa&lt;/a&gt;, &lt;a href="http://blog.sergiusens.org"&gt;sergiusens&lt;/a&gt; and &lt;a href="http://davidplanella.org/"&gt;dpm&lt;/a&gt; to make it easy to snap desktop apps and use them in Ubuntu classic. I also was at a sprint sitting next to &lt;a href="https://launchpad.net/~attente"&gt;attente&lt;/a&gt;, who knows everything I didn’t know about the desktop, so it was a great time to enter the world of collaborative snapping.&lt;/p&gt;
+&lt;p&gt;Let me digress here for a moment to talk about collaboration. &lt;strong&gt;snapcraft&lt;/strong&gt; and &lt;strong&gt;snapd&lt;/strong&gt; are free software, and a lot of their design is based on the idea that the system can be extended and improved through the shared work of many and diverse developers. &lt;strong&gt;snapcraft&lt;/strong&gt; aims to be the universal packaging tool, and &lt;strong&gt;plugins&lt;/strong&gt; are the way we integrate the wild variety of build systems into the lifecycle to generate a snap. KeepassX is more complex than the CLI client, and it uses &lt;em&gt;cmake&lt;/em&gt; to generate the executable. Well, guess what? There’s a plugin for that! :) (&lt;a href="https://github.com/snapcore/snapcraft/blob/master/snapcraft/plugins/cmake.py"&gt;see the source of the cmake plugin&lt;/a&gt;). Also, this application uses the QT5 UI libraries. Just like with the kpcli snap, that means I will require to set up some environment variables and a launcher; but somebody else already did that and we have a way to share and reuse &lt;strong&gt;parts&lt;/strong&gt;. Run:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ snapcraft update
+  $ snapcraft search qt5
+  $ snapcraft define qt5conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There’s a part for that!! And when this application is running, I would like it to be integrated with &lt;em&gt;unity7&lt;/em&gt;, if available. That means I would need a few extra permissions for my isolated app to access the unity7 services and libraries installed in a classic Ubuntu system. I’m a lucky guy because there’s an interface for that!!! (&lt;a href="https://github.com/snapcore/snapd/blob/master/interfaces/builtin/unity7.go"&gt;see the source of the unity7 interface&lt;/a&gt;) By default, snaps will be fully confined and won’t be able to access anything they don’t provide by themselves. Through &lt;strong&gt;interfaces&lt;/strong&gt;, we allow snaps to get extra permissions to consume services, access devices and directories, and do anything that you could do in a classic unconfined Linux system; but now in a controlled manner with the explicit acknowledgement of the user for sensitive stuff. Run:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ snap interfaces&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We have plugins, parts and interfaces for the most common cases of the most common apps. But the fun is just starting, and there are lots and lots of apps out there that would benefit from the controlled dependencies, usable security and transactional updates of snaps. We celebrate when we get new people into the team, so if you want to participate and influence the future of this shiny project, we can help you getting started &lt;a href="https://developer.ubuntu.com/en/blog/2016/06/08/snappy-playpen-kickoff-highlights/"&gt;in the playpen&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;One last detail about collaboration is the relation with upstreams and distribution maintainers. Snapping free software projects is a pleasure because the source is available for us to inspect and decide on the best strategy to build the snap. Then we spread the apps to more people, we get more feedback and in many cases we end up sending patches to improve the upstream project. And I already mentioned the use of Ubuntu packages during the build of the snaps. With this we bootstrap from the awesome work that the &lt;strong&gt;Debian&lt;/strong&gt; and &lt;strong&gt;Ubuntu&lt;/strong&gt; communities are doing, and we’ll keep benefitting from both sides as we need debs to build some snaps, and the two play nicely together.&lt;/p&gt;
+&lt;p&gt;Aaaand back on track, because with all the work shared by the community this KeepassX snap is almost done by itself, but not quite.&lt;/p&gt;
+&lt;p&gt;I start by creating a new &lt;em&gt;snapcraft.yaml&lt;/em&gt; file an defining the snap details:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  name: keepassx-elopio
+  version: "2.0.2"
+  summary: KeePassX is a cross platform password safe
+  description: |
+    KeePassX is an application for people with extremly high demands on secure
+    personal data management. It has a light interface, is cross platform and
+    published under the terms of the GNU General Public License.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, the app:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  apps:
+    keepassx:
+      command: qt5-launch keepassx
+      plugs: [unity7, opengl]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Take a look at that qt5-launch, which is provided from the shared qt &lt;strong&gt;part&lt;/strong&gt; that I will reference in a few lines. &lt;em&gt;keepassx&lt;/em&gt; is a binary that lives inside the snap, and that we will compile using a &lt;em&gt;snapcraft&lt;/em&gt; &lt;strong&gt;plugin&lt;/strong&gt;. Also look at those plugs. That’s how we tell the system that a snap wants to consume an &lt;strong&gt;interface&lt;/strong&gt; slot of the same name.&lt;/p&gt;
+&lt;p&gt;Followed by the parts:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  parts:
+    keepassx:
+      source: https://github.com/keepassx/keepassx.git
+      source-tag: 2.0.2
+      plugin: cmake
+      build-packages:
+        - g++
+        - qtbase5-dev
+        - libqt4-dev
+        - libqt5x11extras5-dev
+        - qttools5-dev
+        - qttools5-dev-tools
+        - libgcrypt20-dev
+        - zlib1g-dev
+      stage-packages:
+        - libgtk2.0-0
+        - libqt5gui5
+        - unity-gtk2-module
+        - appmenu-qt5
+        - dconf-gsettings-backend
+      after: [qt5conf]&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note the new &lt;em&gt;build-packages&lt;/em&gt; section. Those packages will not end up in the snap, they are only used during the compilation so they will be installed in the host where you are running &lt;em&gt;snapcraft&lt;/em&gt;. I already discussed about the &lt;em&gt;stage-packages&lt;/em&gt;, nothing new to see there. Now the &lt;em&gt;after&lt;/em&gt; keyword is where a lot of the collaboration magic happens. It means that my &lt;em&gt;keepassx&lt;/em&gt; part depends on the &lt;em&gt;qt5conf&lt;/em&gt; part. But I don’t define the &lt;em&gt;qt5conf&lt;/em&gt; part in my yaml file, so snapcraft will bring it from the pool of shared parts (&lt;a href="https://github.com/dplanella/qt5conf"&gt;see the source of the qt5conf part&lt;/a&gt;). I love this because I didn’t have to write any of the qt complications, and when a qt expert makes a change to improve it, I just need to run snapcraft again and my snap will be better with no effort. This is where the &lt;em&gt;qt5-launch&lt;/em&gt; I used in the apps section comes from.&lt;/p&gt;
+&lt;p&gt;I finish my yaml adding a last part:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  ...
+  parts:
+    keepassx:
+      ...
+    glibcompiledassets:
+      plugin: copy
+      files:
+        gschemas.compiled: usr/share/glib-2.0/schemas/gschemas.compiled
+        giomodule.cache: usr/lib/x86_64-linux-gnu/gio/modules/giomodule.cache&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is required to save the KeepassX settings. It’s currently not a nice way to include the compiled files in the snap, and we are discussing about how to improve it, so I won’t dig too much here. It shows how simple yet flexible snaps are: you can put anything into the snap, it doesn’t matter how you got it. But it also shows that we have things to improve, so let me insist on my invitation for you to join our project. If there’s something you hate, this is the right time to change it. If there’s something you like, there’s always room to improve it. &lt;a href="http://media-cache-ak0.pinimg.com/736x/d7/cf/6e/d7cf6e3ec423dd7a02cc70a0aba8d99d.jpg"&gt;We have cookies&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Punto final, café con tamal. Give it a try:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  $ sudo snap install keepassx-elopio
+  $ keepassx-elopio.keepassx&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href="https://ia600208.us.archive.org/24/items/elopio-screenshots/EkrankopioDe2016-07-0111-48-23.png"&gt; &lt;img src="https://ia600208.us.archive.org/24/items/elopio-screenshots/EkrankopioDe2016-07-0111-48-23.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;div class="references"&gt;
+
+&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/first-snaps/</guid><pubDate>Fri, 01 Jul 2016 15:00:00 GMT</pubDate></item><item><title>Sharing the Wi-Fi connection through Ethernet</title><link>http://elopio.net/eo/blog/sharing-network/</link><dc:creator>Leo Arias</dc:creator><description>&lt;p&gt;My apartment was clearly not designed for the Internet of Things. I have a weird set up to connect all my devices: there’s ADSL, Ethernet, Wi-Fi, powerline networking, 4G from a free promotion until I download 3GB and then 3G for the rest of the month... It’s crazy, and getting crazier as I have to test more and more devices for &lt;a href="https://developer.ubuntu.com/en/snappy/start/"&gt;snappy&lt;/a&gt;. When I was about to throw a cable from the kitchen to the office I found about &lt;a href="http://askubuntu.com/a/174027/61416"&gt;sharing the network&lt;/a&gt; (thanks &lt;a href="https://askubuntu.com/users/7035/luis-alvarado"&gt;Luis&lt;/a&gt;!). Now let me repeat a slightly modified version of part of Luis’ answer to show how I share my wireless connection through an ethernet cable with my test board.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Open the network indicator.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Click &lt;em&gt;Edit Connections...&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared1.png"&gt; &lt;img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared1.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Network Connections&lt;/em&gt; dialog, click the &lt;em&gt;Add&lt;/em&gt; button.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared2.png"&gt; &lt;img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared2.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Choose a Connection Type&lt;/em&gt; dialog, select &lt;em&gt;Ethernet&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared3.png"&gt; &lt;img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared3.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;On the &lt;em&gt;Editing&lt;/em&gt; dialog, enter a name for the connection.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Go to the &lt;em&gt;IPv4 Settings&lt;/em&gt; tab.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Select the Method &lt;em&gt;Shared to other computers&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared4.png"&gt; &lt;img src="https://ia601505.us.archive.org/25/items/elopio-screenshots/shared4.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Click the &lt;em&gt;Save&lt;/em&gt; button.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;What’s left is to connect an Ethernet cable from your laptop to the board, give power to the board and wait for it to finish booting.&lt;/p&gt;
+&lt;p&gt;To get the IP of the board you can run the &lt;code&gt;arp&lt;/code&gt; command (Thanks to Alex for the tip). It will show you the addresses of the neighbour machines. The one of your board will be like &lt;code&gt;10.42.0.?&lt;/code&gt;. Now you can ssh into the board using the default credentials (username &lt;code&gt;ubuntu&lt;/code&gt;, password &lt;code&gt;ubuntu&lt;/code&gt;) or the ones you configured.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601505.us.archive.org/33/items/JaquerEspeis-bbb-snappy/image20160302_194108865.jpg"&gt; &lt;img src="https://ia601505.us.archive.org/33/items/JaquerEspeis-bbb-snappy/image20160302_194108865.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This also proved to be useful during our &lt;a href="https://archive.org/details/JaquerEspeis-bbb-snappy"&gt;first snappy maker night&lt;/a&gt;, when we had to connect many boards to play with the system.&lt;/p&gt;
+&lt;p&gt;Pro tip: If you are having problems connecting through &lt;code&gt;ssh&lt;/code&gt;, you can connect &lt;a href="http://elopio.net/blog/connecting-to-snappy-through-the-serial-console/"&gt;through the serial console&lt;/a&gt; to check for errors.&lt;/p&gt;
+&lt;div class="references"&gt;
+
+&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/sharing-network/</guid><pubDate>Wed, 16 Mar 2016 05:56:35 GMT</pubDate></item><item><title>Connecting to Snappy through the serial console</title><link>http://elopio.net/eo/blog/connecting-to-snappy-through-the-serial-console/</link><dc:creator>Leo Arias</dc:creator><description>&lt;p&gt;I’m working on &lt;a href="https://developer.ubuntu.com/en/snappy/"&gt;Snappy Ubuntu&lt;/a&gt; with a BeagleBone Black Rev C and a Raspberry Pi 2. You can connect to the boards through the serial console to watch for errors during the boot process and to control the system. After my first burned cable I decided to write down the instructions to connect the cables to reduce the likelihood of my boards catching fire.&lt;/p&gt;
+&lt;p&gt;First, of course, you should &lt;a href="https://developer.ubuntu.com/en/snappy/start/"&gt;flash the SD card with snappy&lt;/a&gt;. Then, get one of these &lt;a href="http://www.adafruit.com/products/954"&gt;FTDI cables&lt;/a&gt; that convert USB to serial. As this cable has the plugs separated, it will work for both boads. The &lt;em&gt;black&lt;/em&gt; wire is &lt;strong&gt;ground&lt;/strong&gt; (GND), the &lt;em&gt;white&lt;/em&gt; wire is &lt;strong&gt;receive into the USB port&lt;/strong&gt;, the &lt;em&gt;green&lt;/em&gt; wire is &lt;strong&gt;transmit out of the USB port&lt;/strong&gt; and the &lt;em&gt;red&lt;/em&gt; wire is &lt;strong&gt;5V power&lt;/strong&gt;.&lt;/p&gt;
+&lt;h1 id="beaglebone-black"&gt;BeagleBone Black&lt;/h1&gt;
+&lt;p&gt;The &lt;a href="https://www.adafruit.com/product/1876"&gt;BeagleBone Black Rev C&lt;/a&gt; has 6 pins. There’s a white dot next to the first pin. Connect the black GND wire to the first pin, the green wire to the fourth pin and the white wire to the fifth pin. On the BeagleBone &lt;strong&gt;NEVER connect the red power wire&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601501.us.archive.org/11/items/snappy-bbb/1-board-serial-pins-compress.jpg"&gt; &lt;img src="https://ia601501.us.archive.org/11/items/snappy-bbb/1-board-serial-pins-compress.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601501.us.archive.org/11/items/snappy-bbb/2-1-serial_cables.jpg"&gt; &lt;img src="https://ia601501.us.archive.org/11/items/snappy-bbb/2-1-serial_cables.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;h1 id="raspberry-pi"&gt;Raspberry Pi&lt;/h1&gt;
+&lt;p&gt;The &lt;a href="https://www.adafruit.com/products/2358"&gt;Raspberry Pi 2 Model B&lt;/a&gt; has 40 pins. &lt;a href="http://www.pighixxx.com/test/2015/06/raspberry-pi-v2-mod-b-pinout/#prettyPhoto%5Bgallery1105%5D/0/"&gt;Here&lt;/a&gt; you can find a nice pinout drawing with the numbers and functions of the pins.&lt;/p&gt;
+&lt;p&gt;Connect the black GND wire to the sixth pin, the white wire to the eight pin and the green wire to the tenth pin. You can optionally power the Raspberry connecting the red wire to the second pin, but if you do this DO NOT connect the USB power connector as you &lt;strong&gt;can’t have both power sources&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601502.us.archive.org/29/items/image20150609_054825862/6-pins-highlight.jpg"&gt; &lt;img src="https://ia601502.us.archive.org/29/items/image20150609_054825862/6-pins-highlight.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601502.us.archive.org/29/items/image20150609_054825862/7-serial.jpg"&gt; &lt;img src="https://ia601502.us.archive.org/29/items/image20150609_054825862/7-serial.jpg" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;h1 id="serial-console"&gt;Serial console&lt;/h1&gt;
+&lt;p&gt;Install screen:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  sudo apt-get install screen&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Plug the other end of the cable to an USB port of your computer and figure out the name of the tty device:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  ls /dev/ttyUSB*&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And start the screen session on the serial terminal, replacing the &lt;code&gt;/dev/ttyUSB?&lt;/code&gt; with the number of your device.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  sudo screen {/dev/ttyUSB?} 115200&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally, insert the SD card and plug in the power source of the board. You will see the boot messages on your terminal and in the end you will be presented with the login prompt. The default user is &lt;em&gt;ubuntu&lt;/em&gt; and the default password is &lt;em&gt;ubuntu&lt;/em&gt; too.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://ia601501.us.archive.org/11/items/snappy-bbb/6-booted.png"&gt; &lt;img src="https://ia601501.us.archive.org/11/items/snappy-bbb/6-booted.png" alt="image"&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Snappy has an SSH server preinstalled, so once you booted successfully you can login through SSH, which will give you a better experience. You can use the serial console to query the IP address of the board:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  ip addr show&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And from a different terminal, replacing &lt;code&gt;ip&lt;/code&gt; with the board IP address:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  ssh ubuntu@{ip}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now you are ready to start playing with snappy on the board. Don’t miss the &lt;a href="https://developer.ubuntu.com/en/snappy/tutorials/using-snappy/"&gt;tour&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To exit the serial console, press &lt;code&gt;CTRL+a&lt;/code&gt; and then &lt;code&gt;k&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="more-information-about-the-cables-and-the-serial-console"&gt;More information about the cables and the serial console&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://elinux.org/Beagleboard:BeagleBone_Black_Serial"&gt;http://elinux.org/Beagleboard:BeagleBone_Black_Serial&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/connect-the-lead"&gt;https://learn.adafruit.com/adafruits-raspberry-pi-lesson-5-using-a-console-cable/connect-the-lead&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://dave.cheney.net/2013/09/22/two-point-five-ways-to-access-the-serial-console-on-your-beaglebone-black"&gt;http://dave.cheney.net/2013/09/22/two-point-five-ways-to-access-the-serial-console-on-your-beaglebone-black&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="references"&gt;
+
+&lt;/div&gt;</description><guid>http://elopio.net/eo/blog/connecting-to-snappy-through-the-serial-console/</guid><pubDate>Fri, 03 Jul 2015 04:58:35 GMT</pubDate></item></channel></rss>

@@ -1,0 +1,19 @@
+* flash
+
+  * bbb:
+
+    sudo ubuntu-device-flash core rolling --channel edge --oem beagleblack --developer-mode -o ubuntu-snappy-rolling-edge-armhf-bbb.img
+
+  * rpi2:
+
+    sudo ubuntu-device-flash core rolling --channel edge --oem pi2.canonical --device raspi2_armhf --developer-mode -o ubuntu-snappy-rolling-edge-armhf-rpi2.img
+
+* snappy-jenkins.ubuntu.com
+
+  * plugins
+
+    scm-sync-configuration git
+
+  * cli
+
+    java -jar jenkins-cli.jar -s http://snappy-jenkins-be.internal:8080/
